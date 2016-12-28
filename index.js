@@ -3,7 +3,9 @@
 const _ = require('lodash');
 const fs = require('mz/fs');
 const path = require('path');
+const globby = require('globby');
 const {parse} = require('scss-parser');
+const minimist = require('minimist');
 const paramCase = require('param-case');
 const createQueryAst = require('query-ast');
 
@@ -52,18 +54,38 @@ function bemLintFile(filePath) {
   ;
 }
 
-function bemLint(filePathList) {
-  Promise.all(_.map(filePathList, filePath => bemLintFile(filePath)))
+function bemLint(config) {
+  filePathList = globby.sync(config.sources, {ignore: _.map(config.ignore, path => `**/${path}`)});
+  return Promise.all(_.map(filePathList, filePath => bemLintFile(filePath)))
     .then(() => {
+      
+      // FIXME
+      console.log({status});
       process.exit(status);
     })
   ;
 }
 
 // Main
-const {argv} = process;
-if (argv.length < 3) {
-  console.log('Usage: ./index.js <scss-file> [<scss-file> ...]');
-  process.exit(1);
-}
-bemLint(argv.slice(2));
+const argv = minimist(process.argv.slice(2));
+const defaultConfig = {
+  sources: argv._,
+  ignore: []
+};
+new Promise(resolve => {
+  if (!argv.config) {
+    resolve(defaultConfig);
+  }
+  resolve(fs.readFile(argv.config, {encoding:'utf8'})
+    .then(data => JSON.parse(data))
+  );
+})
+.then(config => {
+  if (config.sources.length < 1) {
+    console.log('Usage: ./index.js <scss-file> [<scss-file> ...]');
+    process.exit(1);
+  }
+  
+  bemLint(config);
+})
+.catch(error => console.error(error));

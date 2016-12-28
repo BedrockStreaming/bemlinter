@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/tzi/bemlinter.js#readme",
   "dependencies": {
+    "globby": "^6.1.0",
     "lodash": "^4.17.3",
+    "minimist": "^1.2.0",
     "mz": "^2.6.0",
     "param-case": "^2.1.0",
     "query-ast": "^1.0.0",
