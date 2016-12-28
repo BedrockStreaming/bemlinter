@@ -1,0 +1,34 @@
+{
+  "name": "bemlinter.js",
+  "version": "0.1.0",
+  "description": "BEM linter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tzi/bemlinter.js.git"
+  },
+  "keywords": [
+    "bem",
+    "lint",
+    "linter"
+  ],
+  "author": "Thomas ZILLIOX <http://tzi.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tzi/bemlinter.js/issues"
+  },
+  "homepage": "https://github.com/tzi/bemlinter.js#readme",
+  "dependencies": {
+    "lodash": "^4.17.3",
+    "mz": "^2.6.0",
+    "param-case": "^2.1.0",
+    "query-ast": "^1.0.0",
+    "scss-parser": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=5.0.0"
+  }
+}
