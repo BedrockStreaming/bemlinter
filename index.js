@@ -35,10 +35,6 @@ function outputError(message, filePath, node) {
   status = 1;
 }
 
-function isBlockNameOneOf(className, blockList, authorizedBlockName) {
-  return _.some(blockList, blockName => blockName !== authorizedBlockName && isBlockName(className, blockName));
-}
-
 function isBlockName(className, blockName) {
   return (
     className === blockName ||
@@ -47,13 +43,8 @@ function isBlockName(className, blockName) {
   );
 }
 
-function checkExternalClassName($, filePath, blockList) {
-  each($('class').find('identifier'), wrapper => {
-    const className = wrapper.node.value;
-    if (isBlockNameOneOf(className, blockList)) {
-      outputError(`'.${className}' should not be style in an external file.`, filePath, wrapper.node);
-    }
-  });
+function isBlockNameOneOf(className, blockList, authorizedBlockName) {
+  return _.some(blockList, blockName => blockName !== authorizedBlockName && isBlockName(className, blockName));
 }
 
 function checkInternalClassName($, filePath, blockName) {
@@ -61,6 +52,15 @@ function checkInternalClassName($, filePath, blockName) {
     const className = wrapper.node.value;
     if (!isBlockName(className, blockName)) {
       outputError(`'.${className}' is incoherent with the file name.`, filePath, wrapper.node);
+    }
+  });
+}
+
+function checkExternalClassName($, filePath, blockList, blockName) {
+  each($('class').find('identifier'), wrapper => {
+    const className = wrapper.node.value;
+    if (isBlockNameOneOf(className, blockList, blockName)) {
+      outputError(`'.${className}' should not be style outside of his own stylesheet.`, filePath, wrapper.node);
     }
   });
 }
