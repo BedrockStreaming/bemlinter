@@ -15,12 +15,31 @@ const each = (wrapper, fn) => {
   for (let n of wrapper.nodes) { fn(n) }
 };
 
-function outputError(message, filename, node) {
-  console.error(`${filename ? `[${filename}${node ? `:${node.start.line}` : ''}]` : ''} ${message}`);
+function getBlockName(filePath) {
+  const fileName = path.basename(filePath);
+  return paramCase(fileName.slice(0, fileName.length - 4));
+}
+
+function outputError(message, filePath, node) {
+  const error = [];
+  if (filePath) {
+    error.push(`[${path.basename(filePath)}`);
+    if (node) {
+      error.push(`:${node.start.line}`);
+    }
+    error.push('] ');
+  }
+  error.push(message);
+  
+  console.error(error.join(''));
   status = 1;
 }
 
-function isValidBlockName(className, blockName) {
+function isBlockNameOneOf(className, blockList, authorizedBlockName) {
+  return _.some(blockList, blockName => blockName !== authorizedBlockName && isBlockName(className, blockName));
+}
+
+function isBlockName(className, blockName) {
   return (
     className === blockName ||
     _.startsWith(className, `${blockName}--`) ||
@@ -28,38 +47,47 @@ function isValidBlockName(className, blockName) {
   );
 }
 
-function checkInternalClassName(fileName, blockName, $) {
+function checkExternalClassName($, filePath, blockList) {
   each($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
-    console.log({className});
-    if (!isValidBlockName(className, blockName)) {
-      console.log(wrapper.node.start);
-      outputError(`'.${className}' is incoherent with the file name.`, fileName, wrapper.node);
+    if (isBlockNameOneOf(className, blockList)) {
+      outputError(`'.${className}' should not be style in an external file.`, filePath, wrapper.node);
     }
   });
 }
 
-function bemLintFile(filePath) {
-  console.log(filePath);
-  const fileName = path.basename(filePath);
-  const blockName = paramCase(fileName.slice(0, fileName.length - 4));
+function checkInternalClassName($, filePath, blockName) {
+  each($('class').find('identifier'), wrapper => {
+    const className = wrapper.node.value;
+    if (!isBlockName(className, blockName)) {
+      outputError(`'.${className}' is incoherent with the file name.`, filePath, wrapper.node);
+    }
+  });
+}
+
+function bemLintFile(filePath, blockList) {
   
   return fs.readFile(filePath, {encoding:'utf8'})
     .then(data => {
       const ast = parse(data);
       const $ = createQueryAst(ast);
-      checkInternalClassName(fileName, blockName, $);
+      const blockName = getBlockName(filePath);
+      if (blockList.indexOf(blockName) !== -1) {
+        console.log(filePath);
+        checkInternalClassName($, filePath, blockName);
+      } else {
+        checkExternalClassName($, filePath, blockList, blockName);
+      }
     })
-    .catch(message => outputError(message, fileName));
+    .catch(message => outputError(message, filePath))
   ;
 }
 
 function bemLint(config) {
-  filePathList = globby.sync(config.sources, {ignore: _.map(config.ignore, path => `**/${path}`)});
-  return Promise.all(_.map(filePathList, filePath => bemLintFile(filePath)))
+  blockList = globby.sync(config.sources, {ignore: _.map(config.ignore, path => `**/${path}`)}).map(getBlockName);
+  filePathList = globby.sync(config.sources);
+  return Promise.all(_.map(filePathList, filePath => bemLintFile(filePath, blockList)))
     .then(() => {
-      
-      // FIXME
       console.log({status});
       process.exit(status);
     })
