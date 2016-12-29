@@ -11,16 +11,12 @@ const createQueryAst = require('query-ast');
 
 let status = 0;
 
-function getValueList($) {
-  return _.reduce($.get(), (result, node) => [...result, node.value], []);
-}
+const each = (wrapper, fn) => {
+  for (let n of wrapper.nodes) { fn(n) }
+};
 
-function getClassName($) {
-  return getValueList($('class').find('identifier'));
-}
-
-function error(message) {
-  console.error(message);
+function outputError(message, filename, node) {
+  console.error(`${filename ? `[${filename}${node ? `:${node.start.line}` : ''}]` : ''} ${message}`);
   status = 1;
 }
 
@@ -33,24 +29,28 @@ function isValidBlockName(className, blockName) {
 }
 
 function checkInternalClassName(fileName, blockName, $) {
-  _.each(getClassName($), className => {
+  each($('class').find('identifier'), wrapper => {
+    const className = wrapper.node.value;
+    console.log({className});
     if (!isValidBlockName(className, blockName)) {
-      error(`[${fileName}] '${className}' has an incorrect block name.`);
+      console.log(wrapper.node.start);
+      outputError(`'.${className}' is incoherent with the file name.`, fileName, wrapper.node);
     }
   });
 }
 
 function bemLintFile(filePath) {
   console.log(filePath);
+  const fileName = path.basename(filePath);
+  const blockName = paramCase(fileName.slice(0, fileName.length - 4));
   
   return fs.readFile(filePath, {encoding:'utf8'})
     .then(data => {
       const ast = parse(data);
       const $ = createQueryAst(ast);
-      const fileName = path.basename(filePath);
-      const blockName = paramCase(fileName.slice(0, fileName.length - 4));
       checkInternalClassName(fileName, blockName, $);
     })
+    .catch(message => outputError(message, fileName));
   ;
 }
 
@@ -76,9 +76,10 @@ new Promise(resolve => {
   if (!argv.config) {
     resolve(defaultConfig);
   }
-  resolve(fs.readFile(argv.config, {encoding:'utf8'})
+  fs.readFile(argv.config, {encoding:'utf8'})
     .then(data => JSON.parse(data))
-  );
+    .then(resolve)
+  ;
 })
 .then(config => {
   if (config.sources.length < 1) {
@@ -88,4 +89,4 @@ new Promise(resolve => {
   
   bemLint(config);
 })
-.catch(error => console.error(error));
+.catch(console.error);
