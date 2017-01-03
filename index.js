@@ -116,11 +116,12 @@ function bemLintFile(filePath, blockList) {
 }
 
 function bemLint(config) {
-  blockList = globby.sync(config.sources, {ignore: _.map(config.ignore, path => `**/${path}`)}).map(getBlockName);
+  blockList = globby.sync(config.sources, {
+    ignore: config.ignore
+  }).map(getBlockName);
   filePathList = globby.sync(config.sources);
-  return Promise.all(_.map(filePathList, filePath => bemLintFile(filePath, blockList)))
+  return Promise.all(filePathList.map(filePath => bemLintFile(filePath, blockList)))
     .then(() => {
-      console.log({status});
       process.exit(status);
     })
   ;
@@ -139,7 +140,11 @@ new Promise(resolve => {
   }
   fs.readFile(argv.config, {encoding:'utf8'})
     .then(data => JSON.parse(data))
-    .then(resolve)
+    .then(config => {
+      config.sources = config.sources.map(source => source.concat('.scss'));
+      config.ignore = config.ignore.map(path => `**/${path}.scss`);
+      resolve(config);
+    })
   ;
 })
 .then(config => {
