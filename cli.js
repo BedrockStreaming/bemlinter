@@ -64,12 +64,15 @@ new Promise(resolve => {
 })
 .then(logs => {
   let status = 0;
-  console.log({logs});
   _.forIn(logs, (blockLogs, blockName) => {
-    if (blockLogs.error.length) status = 1;
-    outputStatus(blockName, !blockLogs.error.length);
-    blockLogs.error.forEach(outputError);
-    blockLogs.warning.forEach(outputWarning);
+    outputStatus(blockName, !blockLogs.error);
+    if (blockLogs.error) {
+      status = 1;
+      blockLogs.error.forEach(outputError);
+    }
+    if (blockLogs.warning) {
+      blockLogs.warning.forEach(outputWarning);
+    }
   });
   process.exit(status);
 })

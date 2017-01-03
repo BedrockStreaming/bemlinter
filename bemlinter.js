@@ -100,6 +100,12 @@ function bemLintFile(filePath, blockList) {
       } else {
         fileLogs = checkExternalClassName($, filePath, blockList, blockName);
       }
+      fileLogs.push({
+        type: 'log',
+        message: `Linting finish`,
+        filePath,
+        blockName
+      });
 
       //console.log({fileStatus});
       return fileLogs;
