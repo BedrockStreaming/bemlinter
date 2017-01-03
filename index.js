@@ -116,10 +116,10 @@ function bemLintFile(filePath, blockList) {
 }
 
 function bemLint(config) {
-  blockList = globby.sync(config.sources, {
+  const blockList = globby.sync(config.sources, {
     ignore: config.ignore
   }).map(getBlockName);
-  filePathList = globby.sync(config.sources);
+  const filePathList = globby.sync(config.sources);
   return Promise.all(filePathList.map(filePath => bemLintFile(filePath, blockList)))
     .then(() => {
       process.exit(status);
