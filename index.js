@@ -20,19 +20,31 @@ function getBlockName(filePath) {
   return paramCase(fileName.slice(0, fileName.length - 4));
 }
 
-function outputError(message, filePath, node) {
-  const error = [];
+function getContextualMessage(message, filePath, node) {
+  const contextualMessage = [];
   if (filePath) {
-    error.push(`[${path.basename(filePath)}`);
+    contextualMessage.push(`[${path.basename(filePath)}`);
     if (node) {
-      error.push(`:${node.start.line}`);
+      contextualMessage.push(`:${node.start.line}`);
     }
-    error.push('] ');
+    contextualMessage.push('] ');
   }
-  error.push(message);
-  
-  console.error(error.join(''));
+  contextualMessage.push(message);
+
+  return contextualMessage.join('');
+}
+
+function outputWarning(message, filePath, node) {
+  console.warn(getContextualMessage(`Warning: ${message}`, filePath, node));
+}
+
+function outputError(message, filePath, node) {
+  console.error(getContextualMessage(`Error: ${message}`, filePath, node));
   status = 1;
+}
+
+function isBlockWithAPseudoClass($wrapper) {
+  return $wrapper.parent().next().get(0).type === 'pseudo_class';
 }
 
 function isBlockName(className, blockName) {
@@ -51,7 +63,7 @@ function checkInternalClassName($, filePath, blockName) {
   each($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
     if (!isBlockName(className, blockName)) {
-      outputError(`'.${className}' is incoherent with the file name.`, filePath, wrapper.node);
+      outputError(`".${className}" is incoherent with the file name.`, filePath, wrapper.node);
     }
   });
 }
@@ -60,13 +72,16 @@ function checkExternalClassName($, filePath, blockList, blockName) {
   each($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
     if (isBlockNameOneOf(className, blockList, blockName)) {
-      outputError(`'.${className}' should not be style outside of his own stylesheet.`, filePath, wrapper.node);
+      if (isBlockWithAPseudoClass($(wrapper))) {
+        outputWarning(`".${className}" is tolerated in this stylesheet.`, filePath, wrapper.node);
+      } else {
+        outputError(`".${className}" should not be style outside of his own stylesheet.`, filePath, wrapper.node); 
+      }
     }
   });
 }
 
 function bemLintFile(filePath, blockList) {
-  
   return fs.readFile(filePath, {encoding:'utf8'})
     .then(data => {
       const ast = parse(data);
