@@ -24,7 +24,7 @@ You can set your `package.json` to use bemlinter:
     "lint": "bemlinter the/path/to/your/*.scss"
   }
 }
-```json
+```
 
 
 Advanced configuration 
@@ -38,7 +38,7 @@ If you need more configuration you can use a configuration file:
     "lint": "bemlinter --config .bemlinter"
   }
 }
-```json
+```
 
 The configuration file look like this:
 
@@ -57,6 +57,7 @@ The configuration file look like this:
     "old-component"
   ]
 }
+```
 
   
 How to Contribute
