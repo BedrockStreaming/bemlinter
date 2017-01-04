@@ -7,7 +7,7 @@
     "bemlinter": "./src/cli.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -36,5 +36,8 @@
   },
   "engines": {
     "node": ">=5.0.0"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
   }
 }

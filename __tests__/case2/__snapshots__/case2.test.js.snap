@@ -1,0 +1,20 @@
+exports[`test renders correctly 1`] = `
+Object {
+  "internally-broken": Object {
+    "error": Array [
+      Object {
+        "filePath": "./__tests__/case2/internally-broken.scss",
+        "line": 15,
+        "message": "\".external-component\" is incoherent with the file name.",
+      },
+    ],
+    "info": Array [
+      Object {
+        "filePath": "./__tests__/case2/internally-broken.scss",
+        "line": null,
+        "message": "Linting finish",
+      },
+    ],
+  },
+}
+`;
