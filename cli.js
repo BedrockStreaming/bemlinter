@@ -48,7 +48,6 @@ new Promise(resolve => {
   fs.readFile(argv.config, {encoding:'utf8'})
     .then(data => JSON.parse(data))
     .then(config => {
-      config.sources = config.sources.map(source => source.concat('.scss'));
       config.excludeComponent = config.excludeComponent.map(path => `**/${path}.scss`);
       resolve(config);
     })
