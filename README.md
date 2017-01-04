@@ -13,7 +13,7 @@ Quick start
 ------
 
 ```sh
-npm i bemlinter --save
+npm i bemlinter.js --save
 ```
 
 You can set your `package.json` to use bemlinter:
