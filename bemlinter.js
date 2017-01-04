@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const _ = require('lodash');
 const fs = require('mz/fs');
 const path = require('path');
@@ -114,11 +112,11 @@ function bemLintFile(filePath, blockList) {
   ;
 }
 
-module.exports = config => {
-  const blockList = globby.sync(config.sources, {
-    ignore: config.ignore
+module.exports = (sources, excludeComponent) => {
+  const blockList = globby.sync(sources, {
+    ignore: excludeComponent
   }).map(getBlockNameFromFile);
-  const filePathList = globby.sync(config.sources);
+  const filePathList = globby.sync(sources);
   return Promise.all(filePathList.map(filePath => bemLintFile(filePath, blockList)))
     .then(fileLogs => {
       return _.mapValues(

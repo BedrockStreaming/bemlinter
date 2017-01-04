@@ -38,7 +38,7 @@ function outputStatus(blockName, fileStatus) {
 const argv = minimist(process.argv.slice(2));
 const defaultConfig = {
   sources: argv._,
-  ignore: []
+  excludeComponent: []
 };
 
 new Promise(resolve => {
@@ -49,7 +49,7 @@ new Promise(resolve => {
     .then(data => JSON.parse(data))
     .then(config => {
       config.sources = config.sources.map(source => source.concat('.scss'));
-      config.ignore = config.ignore.map(path => `**/${path}.scss`);
+      config.excludeComponent = config.excludeComponent.map(path => `**/${path}.scss`);
       resolve(config);
     })
   ;
@@ -60,7 +60,7 @@ new Promise(resolve => {
     process.exit(1);
   }
 
-  return bemlinter(config)
+  return bemlinter(config.sources, config.excludeComponent)
 })
 .then(logs => {
   let status = 0;
