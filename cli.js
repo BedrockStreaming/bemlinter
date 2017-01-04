@@ -62,17 +62,26 @@ new Promise(resolve => {
   return bemlinter(config.sources, config.excludeComponent)
 })
 .then(logs => {
-  let status = 0;
+  let nbBlock = 0;
+  let nbBlockKO = 0;
   _.forIn(logs, (blockLogs, blockName) => {
+    nbBlock++;
     outputStatus(blockName, !blockLogs.error);
     if (blockLogs.error) {
-      status = 1;
+      nbBlockKO++;
       blockLogs.error.forEach(outputError);
     }
     if (blockLogs.warning) {
       blockLogs.warning.forEach(outputWarning);
     }
   });
-  process.exit(status);
+
+  console.log('');
+  if (nbBlockKO) {
+    console.log(`FAILED: ${nbBlockKO} on ${nbBlock} components lint on error.`);
+    process.exit(1);
+  }
+  console.log(`OK: ${nbBlock} components tested.`);
+  process.exit(0);
 })
 .catch(console.error);
