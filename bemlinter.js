@@ -7,6 +7,32 @@ const {parse} = require('scss-parser');
 const paramCase = require('param-case');
 const createQueryAst = require('query-ast');
 
+
+// LOGS
+const logs = [];
+
+function addLog(type, message, filePath, blockName, wrapper) {
+  logs.push({
+    type,
+    message,
+    filePath,
+    blockName,
+    line: wrapper ? wrapper.node.start.line : null
+  });
+}
+
+function addInfo(message, filePath, blockName, wrapper) {
+  addLog('info', message, filePath, blockName, wrapper);
+}
+
+function addError(message, filePath, blockName, wrapper) {
+  addLog('error', message, filePath, blockName, wrapper);
+}
+
+function addWarning(message, filePath, blockName, wrapper) {
+  addLog('warning', message, filePath, blockName, wrapper);
+}
+
 // Utils
 function getBlockNameFromFile(filePath) {
   const fileName = path.basename(filePath);
@@ -44,13 +70,7 @@ function checkInternalClassName($, filePath, blockName) {
   return $('class').find('identifier').reduce((fileLogs, wrapper) => {
     const className = wrapper.node.value;
     if (!isBlockName(className, blockName)) {
-      fileLogs.push({
-        type: 'error',
-        message: `".${className}" is incoherent with the file name.`,
-        filePath,
-        blockName,
-        node: wrapper.node
-      });
+      addError(`".${className}" is incoherent with the file name.`, filePath, blockName, wrapper);
     }
     
     return fileLogs;
@@ -61,22 +81,11 @@ function checkExternalClassName($, filePath, blockList, authorizedBlockName) {
   return $('class').find('identifier').reduce((fileLogs, wrapper) => {
     const className = wrapper.node.value;
     if (isBlockNameOneOf(className, blockList, authorizedBlockName)) {
+      const blockName = getBlockNameFromClass(className);
       if (isBlockWithAPseudoClass($(wrapper))) {
-        fileLogs.push({
-          type: 'warning',
-          message: `".${className}" is tolerated in this stylesheet.`,
-          filePath,
-          blockName: getBlockNameFromClass(className),
-          node: wrapper.node
-        });
+        addWarning(`".${className}" is tolerated in this stylesheet.`, filePath, blockName, wrapper);
       } else {
-        fileLogs.push({
-          type: 'error',
-          message: `".${className}" should not be style outside of his own stylesheet.`,
-          filePath,
-          blockName: getBlockNameFromClass(className),
-          node: wrapper.node
-        });
+        addError(`".${className}" should not be style outside of his own stylesheet.`, filePath, blockName, wrapper);
       }
     }
     
@@ -86,29 +95,23 @@ function checkExternalClassName($, filePath, blockList, authorizedBlockName) {
 
 // Main
 function bemLintFile(filePath, blockList) {
+  const blockName = getBlockNameFromFile(filePath);
+  
   return fs.readFile(filePath, {encoding:'utf8'})
     .then(data => {
       const ast = parse(data);
       const $ = createQueryAst(ast);
-      const blockName = getBlockNameFromFile(filePath);
-      let fileLogs;
       
       if (blockList.indexOf(blockName) !== -1) {
-        fileLogs = checkInternalClassName($, filePath, blockName);
-      } else {
-        fileLogs = checkExternalClassName($, filePath, blockList, blockName);
+        checkInternalClassName($, filePath, blockName);
       }
-      fileLogs.push({
-        type: 'log',
-        message: `Linting finish`,
-        filePath,
-        blockName
-      });
-
-      //console.log({fileStatus});
-      return fileLogs;
+      checkExternalClassName($, filePath, blockList, blockName);
+      addInfo('Linting finish', filePath, blockName);
     })
-    .catch(error => console.error(error))
+    .catch(error => {
+      addError('Impossible to parse source file', filePath, blockName);
+      console.error(error);
+    })
   ;
 }
 
@@ -117,10 +120,11 @@ module.exports = (sources, excludeComponent) => {
     ignore: excludeComponent
   }).map(getBlockNameFromFile);
   const filePathList = globby.sync(sources);
+  
   return Promise.all(filePathList.map(filePath => bemLintFile(filePath, blockList)))
-    .then(fileLogs => {
+    .then(() => {
       return _.mapValues(
-        _.groupBy(_.flatten(fileLogs), 'blockName'),
+        _.groupBy(_.flatten(logs), 'blockName'),
         blockLog => _.groupBy(blockLog, 'type')
       );
     })

@@ -8,12 +8,12 @@ const minimist = require('minimist');
 const bemlinter = require('./bemlinter');
 
 // Output
-function getContextualMessage(message, filePath, node) {
+function getContextualMessage(message, filePath, line) {
   const contextualMessage = [];
   if (filePath) {
     contextualMessage.push(`[${path.basename(filePath)}`);
-    if (node) {
-      contextualMessage.push(`:${node.start.line}`);
+    if (line) {
+      contextualMessage.push(`:${line}`);
     }
     contextualMessage.push('] ');
   }
@@ -78,7 +78,7 @@ new Promise(resolve => {
 
   console.log('');
   if (nbBlockKO) {
-    console.log(`FAILED: ${nbBlockKO} on ${nbBlock} components lint on error.`);
+    console.log(`FAILED: ${nbBlockKO} on ${nbBlock} components with lint on error.`);
     process.exit(1);
   }
   console.log(`OK: ${nbBlock} components tested.`);
