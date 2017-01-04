@@ -22,12 +22,12 @@ function getContextualMessage(message, filePath, line) {
   return contextualMessage.join('');
 }
 
-function outputWarning({message, filePath, node}) {
-  console.warn(getContextualMessage(`Warning: ${message}`, filePath, node));
+function outputWarning({message, filePath, line}) {
+  console.warn(getContextualMessage(`Warning: ${message}`, filePath, line));
 }
 
-function outputError({message, filePath, node}) {
-  console.error(getContextualMessage(`Error: ${message}`, filePath, node));
+function outputError({message, filePath, line}) {
+  console.error(getContextualMessage(`Error: ${message}`, filePath, line));
 }
 
 function outputStatus(blockName, fileStatus) {

@@ -7,15 +7,19 @@ const {parse} = require('scss-parser');
 const paramCase = require('param-case');
 const createQueryAst = require('query-ast');
 
+// Utils
+function groupByAndOmit(haystack, needle) {
+  return _.mapValues(_.groupBy(haystack, needle), values => values.map(value => _.omit(value, needle)));
+}
 
-// LOGS
+// Logs
 const logs = [];
 
 function addLog(type, message, filePath, blockName, wrapper) {
   logs.push({
     type,
     message,
-    filePath,
+    filePath: `.${filePath.slice(path.resolve('.').length)}`,
     blockName,
     line: wrapper ? wrapper.node.start.line : null
   });
@@ -33,7 +37,7 @@ function addWarning(message, filePath, blockName, wrapper) {
   addLog('warning', message, filePath, blockName, wrapper);
 }
 
-// Utils
+// CSS Class manipulation
 function getBlockNameFromFile(filePath) {
   const fileName = path.basename(filePath);
   return paramCase(fileName.slice(0, fileName.length - 4));
@@ -115,7 +119,7 @@ function bemLintFile(filePath, blockList) {
   ;
 }
 
-module.exports = (sources, excludeComponent) => {
+module.exports = (sources, excludeComponent = []) => {
   const blockList = globby.sync(sources, {
     ignore: excludeComponent
   }).map(getBlockNameFromFile);
@@ -124,8 +128,8 @@ module.exports = (sources, excludeComponent) => {
   return Promise.all(filePathList.map(filePath => bemLintFile(filePath, blockList)))
     .then(() => {
       return _.mapValues(
-        _.groupBy(_.flatten(logs), 'blockName'),
-        blockLog => _.groupBy(blockLog, 'type')
+        groupByAndOmit(_.flatten(logs), 'blockName'),
+        blockLog => groupByAndOmit(blockLog, 'type')
       );
     })
   ;
