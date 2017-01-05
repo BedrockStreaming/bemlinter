@@ -58,7 +58,11 @@ The configuration file look like this:
     "messed-up-component",
     "disorder-file",
     "old-component"
-  ]
+  ],
+  // Optionally disable some check
+  "options": {
+    "checkLowerCase": false
+  }
 }
 ```
 

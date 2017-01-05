@@ -38,7 +38,8 @@ function outputStatus(blockName, fileStatus) {
 const argv = minimist(process.argv.slice(2));
 const defaultConfig = {
   sources: argv._,
-  excludeComponent: []
+  excludeComponent: [],
+  options: {}
 };
 
 new Promise(resolve => {
@@ -65,7 +66,7 @@ new Promise(resolve => {
     process.exit(1);
   }
 
-  return bemlinter(config.sources, config.excludeComponent)
+  return bemlinter(config.sources, config.excludeComponent, config.options);
 })
 .then(logs => {
   let nbBlock = 0;

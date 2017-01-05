@@ -17,10 +17,14 @@ function eachWrapper(wrapper, fn) {
 }
 
 // Logs
-let logs = [];
+let _logs = [];
+let _defaultOptions = {
+  checkLowerCase: true
+};
+let _options = {};
 
 function addLog(type, message, filePath, blockName, wrapper) {
-  logs.push({
+  _logs.push({
     type,
     message,
     filePath: `.${filePath.slice(path.resolve('.').length)}`,
@@ -94,7 +98,7 @@ function checkExternalClassName($, filePath, blockList, authorizedBlockName) {
 function checkBemSyntaxClassName($, filePath, blockName) {
   eachWrapper($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
-    if (className !== className.toLowerCase()) {
+    if (_options.checkLowerCase && className !== className.toLowerCase()) {
       addError(`".${className}" should be in lower case.`, filePath, blockName, wrapper);
     }
     if (/___/.test(className)) {
@@ -138,8 +142,9 @@ function bemLintFile(filePath, blockList) {
   ;
 }
 
-module.exports = (sources, excludeComponent = []) => {
-  logs = [];
+module.exports = (sources, excludeComponent = [], options) => {
+  _logs = [];
+  _options = _.merge(_defaultOptions, options);
   const blockList = globby.sync(sources, {
     ignore: excludeComponent
   }).map(getBlockNameFromFile);
@@ -148,7 +153,7 @@ module.exports = (sources, excludeComponent = []) => {
   return Promise.all(filePathList.map(filePath => bemLintFile(filePath, blockList)))
     .then(() => {
       return _.mapValues(
-        groupByAndOmit(_.flatten(logs), 'blockName'),
+        groupByAndOmit(_.flatten(_logs), 'blockName'),
         blockLog => groupByAndOmit(blockLog, 'type')
       );
     })
