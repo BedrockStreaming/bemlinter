@@ -44,13 +44,16 @@ The configuration file look like this:
 
 ```json
 {
-	// Define the sources file
+  // Define the paths of your source files
   "sources": [
     "a/path/to/your/scss/*.scss",
-    "a/path/to/a/specific/scss/main.scss",
-    "!an/exclude/path/of/scss/*.scss"
+    "a/path/to/a/specific/scss/main.scss
   ],
-	// Define the sources file that are not a component yet, so the linter will be kind ;)
+  // Define the paths of some exclude source files 
+  "excludePath": [
+    "an/exclude/path/of/scss/*.scss"
+  ],
+  // Define the names of some component that are not isolated yet, so the linter will be kind ;)
   "excludeComponent": [
     "messed-up-component",
     "disorder-file",

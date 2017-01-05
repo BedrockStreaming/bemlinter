@@ -48,9 +48,15 @@ new Promise(resolve => {
   fs.readFile(argv.config, {encoding:'utf8'})
     .then(data => JSON.parse(data))
     .then(config => {
-      config.excludeComponent = config.excludeComponent.map(path => `**/${path}.scss`);
+      config.excludePath = config.excludePath.map(filePath => `!${path.resolve(filePath)}`);
+      config.sources = config.sources
+        .map(filePath => path.resolve(filePath))
+        .concat(config.excludePath)
+      ;
+      config.excludeComponent = config.excludeComponent.map(component => `**/${component}.scss`);
       resolve(config);
     })
+    .catch(console.error);
   ;
 })
 .then(config => {
