@@ -3,7 +3,7 @@
 \*------------------------------------*/
 @import '../import/something';
 
-.internally-broken {
+.leak {
   display: block;
   position: absolute;
   z-index: 10;
@@ -27,12 +27,12 @@
   }
 }
 
-.internally-broken--big {
+.leak--big {
   width: 64px;
   height: 64px;
 }
 
-.internally-broken__close {
+.leak__close {
   position: absolute;
   top: 14px;
   right: 15px;
