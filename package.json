@@ -35,7 +35,7 @@
     "scss-parser": "^1.0.0"
   },
   "engines": {
-    "node": ">=5.0.0"
+    "node": ">=6"
   },
   "devDependencies": {
     "jest": "^18.1.0"
