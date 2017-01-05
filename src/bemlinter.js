@@ -12,6 +12,10 @@ function groupByAndOmit(haystack, needle) {
   return _.mapValues(_.groupBy(haystack, needle), values => values.map(value => _.omit(value, needle)));
 }
 
+function eachWrapper(wrapper, fn) {
+  for (let n of wrapper.nodes) { fn(n) }
+}
+
 // Logs
 let logs = [];
 
@@ -71,18 +75,16 @@ function isBlockNameOneOf(className, blockList, authorizedBlockName) {
 
 // Checker
 function checkInternalClassName($, filePath, blockName) {
-  return $('class').find('identifier').reduce((fileLogs, wrapper) => {
+  eachWrapper($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
     if (!isBlockName(className, blockName)) {
       addError(`".${className}" is incoherent with the file name.`, filePath, blockName, wrapper);
     }
-    
-    return fileLogs;
-  }, []);
+  });
 }
 
 function checkExternalClassName($, filePath, blockList, authorizedBlockName) {
-  return $('class').find('identifier').reduce((fileLogs, wrapper) => {
+  eachWrapper($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
     if (isBlockNameOneOf(className, blockList, authorizedBlockName)) {
       const blockName = getBlockNameFromClass(className);
@@ -92,9 +94,7 @@ function checkExternalClassName($, filePath, blockList, authorizedBlockName) {
         addError(`".${className}" should not be style outside of his own stylesheet.`, filePath, blockName, wrapper);
       }
     }
-    
-    return fileLogs;
-  }, []);
+  });
 }
 
 // Main
