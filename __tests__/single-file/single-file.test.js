@@ -1,6 +1,6 @@
 const bemlinter = require('./../../src/bemlinter');
 
-it('should render 1 block without error', (done) => {
+it('should log one block linted without error', (done) => {
   bemlinter(`${__dirname}/alright.scss`)
     .then(logs => {
       expect(logs).toMatchSnapshot();
@@ -8,8 +8,16 @@ it('should render 1 block without error', (done) => {
     });
 });
 
-it('should render 1 block with a leak error', (done) => {
+it('should log one block linted with a leak error', (done) => {
   bemlinter(`${__dirname}/leak.scss`)
+    .then(logs => {
+      expect(logs).toMatchSnapshot();
+      done();
+    });
+});
+
+it('should log one block linted with 6 syntax error', (done) => {
+  bemlinter(`${__dirname}/syntax.scss`)
     .then(logs => {
       expect(logs).toMatchSnapshot();
       done();

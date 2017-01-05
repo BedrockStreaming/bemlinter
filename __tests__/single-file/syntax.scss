@@ -1,0 +1,60 @@
+/*------------------------------------*\
+  Alright
+\*------------------------------------*/
+@import '../import/something';
+
+.syntax {
+  display: block;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 29px;
+  height: 29px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: hotpink;
+  }
+}
+
+.syntax---big {
+  width: 64px;
+  height: 64px;
+}
+
+.syntax--big--light {
+  width: 64px;
+  height: 64px;
+  background: lightpink;
+}
+
+.syntax__Close {
+  position: absolute;
+  top: 14px;
+  right: 15px;
+  
+  background-image: url('/assets/close.svg');
+}
+
+.syntax--big__close {
+  top: 28px;
+  right: 30px;
+}
+
+.syntax__header {
+  display: none;
+}
+
+.syntax__header__logo {
+  display: none;
+}
+
+.syntax___footer {
+  display: none;
+}

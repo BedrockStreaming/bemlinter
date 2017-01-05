@@ -48,13 +48,7 @@ function getBlockNameFromFile(filePath) {
 }
 
 function getBlockNameFromClass(className) {
-  if (className.indexOf('__') != -1) {
-    return className.slice(0, className.indexOf('__'));
-  }
-  if (className.indexOf('--') != -1) {
-    return className.slice(0, className.indexOf('--'));
-  }
-  return className;
+  return className.split('__')[0].split('--')[0];
 }
 
 function isBlockWithAPseudoClass($wrapper) {
@@ -97,6 +91,30 @@ function checkExternalClassName($, filePath, blockList, authorizedBlockName) {
   });
 }
 
+function checkBemSyntaxClassName($, filePath, blockName) {
+  eachWrapper($('class').find('identifier'), wrapper => {
+    const className = wrapper.node.value;
+    if (className !== className.toLowerCase()) {
+      addError(`".${className}" should be in lower case.`, filePath, blockName, wrapper);
+    }
+    if (/___/.test(className)) {
+      addError(`".${className}" element should have only 2 underscores.`, filePath, blockName, wrapper);
+    }
+    if (/---/.test(className)) {
+      addError(`".${className}" modifier should have only 2 dashes.`, filePath, blockName, wrapper);
+    }
+    if (/--[^-]+--/.test(className)) {
+      addError(`".${className}" should have a single modifier.`, filePath, blockName, wrapper);
+    }
+    if (/__[^-]+__/.test(className)) {
+      addError(`".${className}" should have a single depth of element.`, filePath, blockName, wrapper);
+    }
+    if (/--[^-]+__/.test(className)) {
+      addError(`".${className}" represents an element of a modifier, it should be cut in 2 classes.`, filePath, blockName, wrapper);
+    }
+  });
+}
+
 // Main
 function bemLintFile(filePath, blockList) {
   const blockName = getBlockNameFromFile(filePath);
@@ -105,7 +123,8 @@ function bemLintFile(filePath, blockList) {
     .then(data => {
       const ast = parse(data);
       const $ = createQueryAst(ast);
-      
+
+      checkBemSyntaxClassName($, filePath, blockName);
       if (blockList.indexOf(blockName) !== -1) {
         checkInternalClassName($, filePath, blockName);
       }
