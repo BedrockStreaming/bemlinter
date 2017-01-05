@@ -13,7 +13,7 @@ function groupByAndOmit(haystack, needle) {
 }
 
 // Logs
-const logs = [];
+let logs = [];
 
 function addLog(type, message, filePath, blockName, wrapper) {
   logs.push({
@@ -120,6 +120,7 @@ function bemLintFile(filePath, blockList) {
 }
 
 module.exports = (sources, excludeComponent = []) => {
+  logs = [];
   const blockList = globby.sync(sources, {
     ignore: excludeComponent
   }).map(getBlockNameFromFile);
