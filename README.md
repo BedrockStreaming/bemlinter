@@ -1,4 +1,4 @@
-bemlinter.js
+bemlinter.js [![Build Status](https://travis-ci.org/tzi/bemlinter.js.svg?branch=master)](https://travis-ci.org/tzi/bemlinter.js)
 ======
 
 A cli tool to lint bem component isolation in SCSS files
