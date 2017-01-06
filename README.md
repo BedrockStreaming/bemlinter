@@ -59,7 +59,7 @@ To define the paths of your source files
 
 To define the paths of some exclude source files 
 
-default: []
+default: `[]`
 
 ```json
 {
@@ -73,7 +73,7 @@ default: []
 
 To define the names of some component that are not isolated yet, so the linter will be kind ;)
 
-default: []
+default: `[]`
 
 ```json
 {
@@ -88,7 +88,7 @@ default: []
  
 To disable lower case check
 
-default: true
+default: `true`
 
 ```json
 {
@@ -100,7 +100,7 @@ default: true
  
 To set the authorized prefix
 
-default: ['']
+default: `['']`
 
 ```json
 {
