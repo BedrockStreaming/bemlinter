@@ -38,11 +38,10 @@ function outputStatus(blockName, fileStatus) {
 const argv = minimist(process.argv.slice(2));
 const defaultConfig = {
   sources: argv._,
+  excludePath: [],
   excludeComponent: [],
-  options: {
-    checkLowerCase: true,
-    prefix: ['']
-  }
+  checkLowerCase: true,
+  prefix: ['']
 };
 
 new Promise(resolve => {
@@ -58,7 +57,10 @@ new Promise(resolve => {
         .concat(config.excludePath)
       ;
       config.excludeComponent = config.excludeComponent.map(component => `**/${component}.scss`);
-      resolve(config);
+      resolve({
+        sources: config.sources,
+        options: _.omit(config, 'sources')
+      });
     })
     .catch(console.error)
   ;
@@ -69,7 +71,7 @@ new Promise(resolve => {
     process.exit(1);
   }
 
-  return bemlinter(config.sources, config.excludeComponent, config.options);
+  return bemlinter(config.sources, config.options);
 })
 .then(logs => {
   let nbBlock = 0;

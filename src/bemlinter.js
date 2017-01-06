@@ -18,16 +18,17 @@ function eachWrapper(wrapper, fn) {
 
 // Settings
 const defaultOptions = {
+  excludeComponent: [],
   checkLowerCase: true,
   prefix: ['']
 };
 
 // Exports
-module.exports = (sources, excludeComponent = [], userOptions = defaultOptions) => {
+module.exports = (sources, userOptions = defaultOptions) => {
   const logs = [];
   const options = _.merge({}, defaultOptions, userOptions);
   const blockList = globby.sync(sources, {
-    ignore: excludeComponent
+    ignore: options.excludeComponent
   }).map(getBlockNameFromFile);
   const filePathList = globby.sync(sources);
 

@@ -27,7 +27,7 @@ You can set your `package.json` to use bemlinter:
 ```
 
 
-Advanced configuration 
+Configuration file 
 ------
 
 If you need more configuration you can use a configuration file:
@@ -40,34 +40,75 @@ If you need more configuration you can use a configuration file:
 }
 ```
 
-The configuration file look like this:
+The configuration file is a json file:
+
+### sources
+
+To define the paths of your source files
 
 ```json
 {
-  // Define the paths of your source files
   "sources": [
     "a/path/to/your/scss/*.scss",
     "a/path/to/a/specific/scss/main.scss
-  ],
-  // Define the paths of some exclude source files 
+  ]
+}
+```
+
+### excludePath (option)
+
+To define the paths of some exclude source files 
+
+default: []
+
+```json
+{
   "excludePath": [
     "an/exclude/path/of/scss/*.scss"
-  ],
-  // Define the names of some component that are not isolated yet, so the linter will be kind ;)
+  ]
+}
+```
+
+### excludeComponent (option)
+
+To define the names of some component that are not isolated yet, so the linter will be kind ;)
+
+default: []
+
+```json
+{
   "excludeComponent": [
     "messed-up-component",
     "disorder-file",
     "old-component"
-  ],
-  // Optionally disable some check or add a prefix
-  "options": {
-    "checkLowerCase": false,
-    "prefix": ['c-']
-  }
+  ]
+}
+
+### checkLowerCase (option)
+ 
+To disable lower case check
+
+default: true
+
+```json
+{
+  "checkLowerCase": false
 }
 ```
 
-  
+### prefix (option)
+ 
+To set the authorized prefix
+
+default: ['']
+
+```json
+{
+  "prefix": ['c-']
+}
+```
+
+
 How to Contribute
 --------
 
