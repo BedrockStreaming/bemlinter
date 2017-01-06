@@ -17,15 +17,15 @@ function eachWrapper(wrapper, fn) {
 }
 
 // Settings
-let defaultOptions = {
+const defaultOptions = {
   checkLowerCase: true,
-  prefix: []
+  prefix: ['']
 };
 
-// Eexports
-module.exports = (sources, excludeComponent = [], userOptions) => {
+// Exports
+module.exports = (sources, excludeComponent = [], userOptions = defaultOptions) => {
   const logs = [];
-  const options = _.merge(defaultOptions, userOptions);
+  const options = _.merge({}, defaultOptions, userOptions);
   const blockList = globby.sync(sources, {
     ignore: excludeComponent
   }).map(getBlockNameFromFile);
@@ -70,23 +70,44 @@ module.exports = (sources, excludeComponent = [], userOptions) => {
   }
   
   function getBlockNameFromClass(className) {
-    return className.split('__')[0].split('--')[0];
+    const blockName = className.split('__')[0].split('--')[0];
+    const prefixes = _.reverse(_.sortBy(options.prefix));
+    const prefix = _.find(prefixes, prefix => _.startsWith(className, prefix));
+    if (!prefix) {
+      return blockName;
+    }
+    return blockName.slice(prefix.length);
   }
   
   function isBlockWithAPseudoClass($wrapper) {
     return $wrapper.parent().next().get(0).type === 'pseudo_class';
   }
   
-  function isBlockName(className, blockName) {
+  function isBlockName(className, blockName, prefixes = options.prefix) {
+    return _.some(prefixes, prefix => {
+      const prefixedBlockName = `${prefix}${blockName}`;
+      return (
+        className === prefixedBlockName ||
+        _.startsWith(className, `${prefixedBlockName}--`) ||
+        _.startsWith(className, `${prefixedBlockName}__`)
+      );
+    });
+  }
+
+  function isClassPrefixMissing(className, blockName) {
     return (
-      className === blockName ||
-      _.startsWith(className, `${blockName}--`) ||
-      _.startsWith(className, `${blockName}__`)
+      options.prefix.indexOf('') === -1 &&
+      isBlockName(className, blockName, [''])
     );
   }
   
   function isBlockNameOneOf(className, blockList, authorizedBlockName) {
-    return _.some(blockList, blockName => blockName !== authorizedBlockName && isBlockName(className, blockName));
+    return _.some(blockList, blockName => {
+      return (
+        blockName !== authorizedBlockName &&
+        isBlockName(className, blockName)
+      );
+    });
   }
   
   // Checker
@@ -94,7 +115,11 @@ module.exports = (sources, excludeComponent = [], userOptions) => {
     eachWrapper($('class').find('identifier'), wrapper => {
       const className = wrapper.node.value;
       if (!isBlockName(className, blockName)) {
-        addError(`".${className}" is incoherent with the file name.`, filePath, blockName, wrapper);
+        if (isClassPrefixMissing(className, blockName)) {
+          addError(`".${className}" should have a component prefix.`, filePath, blockName, wrapper);
+        } else {
+          addError(`".${className}" is incoherent with the file name.`, filePath, blockName, wrapper);
+        }
       }
     });
   }

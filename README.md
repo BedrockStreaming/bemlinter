@@ -59,9 +59,10 @@ The configuration file look like this:
     "disorder-file",
     "old-component"
   ],
-  // Optionally disable some check
+  // Optionally disable some check or add a prefix
   "options": {
-    "checkLowerCase": false
+    "checkLowerCase": false,
+    "prefix": ['c-']
   }
 }
 ```

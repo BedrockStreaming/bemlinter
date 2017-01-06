@@ -39,7 +39,10 @@ const argv = minimist(process.argv.slice(2));
 const defaultConfig = {
   sources: argv._,
   excludeComponent: [],
-  options: {}
+  options: {
+    checkLowerCase: true,
+    prefix: ['']
+  }
 };
 
 new Promise(resolve => {
@@ -57,7 +60,7 @@ new Promise(resolve => {
       config.excludeComponent = config.excludeComponent.map(component => `**/${component}.scss`);
       resolve(config);
     })
-    .catch(console.error);
+    .catch(console.error)
   ;
 })
 .then(config => {
