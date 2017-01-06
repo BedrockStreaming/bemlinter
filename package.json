@@ -1,6 +1,6 @@
 {
   "name": "bemlinter.js",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "description": "BEM linter",
   "main": "index.js",
   "bin": {

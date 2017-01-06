@@ -1,14 +1,5 @@
 exports[`Bemlinter of multiple files should lint with crossed error 1`] = `
 Object {
-  "c-other-component": Object {
-    "error": Array [
-      Object {
-        "filePath": "./__tests__/multiple-files/component.scss",
-        "line": 8,
-        "message": "\".c-other-component\" should not be style outside of his own stylesheet.",
-      },
-    ],
-  },
   "component": Object {
     "error": Array [
       Object {
@@ -26,6 +17,13 @@ Object {
     ],
   },
   "other-component": Object {
+    "error": Array [
+      Object {
+        "filePath": "./__tests__/multiple-files/component.scss",
+        "line": 8,
+        "message": "\".c-other-component\" should not be style outside of his own stylesheet.",
+      },
+    ],
     "info": Array [
       Object {
         "filePath": "./__tests__/multiple-files/other-component.scss",
@@ -39,15 +37,6 @@ Object {
 
 exports[`Bemlinter of multiple files should lint with crossed error 2`] = `
 Object {
-  "c-other-component": Object {
-    "error": Array [
-      Object {
-        "filePath": "./__tests__/multiple-files/component.scss",
-        "line": 8,
-        "message": "\".c-other-component\" should not be style outside of his own stylesheet.",
-      },
-    ],
-  },
   "component": Object {
     "error": Array [
       Object {
@@ -65,6 +54,13 @@ Object {
     ],
   },
   "other-component": Object {
+    "error": Array [
+      Object {
+        "filePath": "./__tests__/multiple-files/component.scss",
+        "line": 8,
+        "message": "\".c-other-component\" should not be style outside of his own stylesheet.",
+      },
+    ],
     "info": Array [
       Object {
         "filePath": "./__tests__/multiple-files/other-component.scss",
