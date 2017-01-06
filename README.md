@@ -83,6 +83,7 @@ default: `[]`
     "old-component"
   ]
 }
+```
 
 ### checkLowerCase (option)
  
@@ -104,7 +105,7 @@ default: `['']`
 
 ```json
 {
-  "prefix": ['c-']
+  "prefix": ["c-"]
 }
 ```
 
