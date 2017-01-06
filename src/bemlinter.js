@@ -151,7 +151,7 @@ module.exports = (sources, excludeComponent = [], userOptions) => {
           checkInternalClassName($, filePath, blockName);
         }
         checkExternalClassName($, filePath, blockList, blockName);
-        addInfo('Linting finish', filePath, blockName);
+        addInfo('Parsed', filePath, blockName);
       })
       .catch(error => {
         addError('Impossible to parse source file', filePath, blockName);

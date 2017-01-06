@@ -1,4 +1,4 @@
-exports[`test should log one block linted with 6 syntax error 1`] = `
+exports[`test should log a lint with 6 syntax error 1`] = `
 Object {
   "syntax": Object {
     "error": Array [
@@ -37,14 +37,14 @@ Object {
       Object {
         "filePath": "./__tests__/single-file/syntax.scss",
         "line": null,
-        "message": "Linting finish",
+        "message": "Parsed",
       },
     ],
   },
 }
 `;
 
-exports[`test should log one block linted with a leak error 1`] = `
+exports[`test should log a lint with a leak error 1`] = `
 Object {
   "leak": Object {
     "error": Array [
@@ -58,21 +58,62 @@ Object {
       Object {
         "filePath": "./__tests__/single-file/leak.scss",
         "line": null,
-        "message": "Linting finish",
+        "message": "Parsed",
       },
     ],
   },
 }
 `;
 
-exports[`test should log one block linted without error 1`] = `
+exports[`test should log a lint without error 1`] = `
 Object {
   "alright": Object {
     "info": Array [
       Object {
         "filePath": "./__tests__/single-file/alright.scss",
         "line": null,
-        "message": "Linting finish",
+        "message": "Parsed",
+      },
+    ],
+  },
+}
+`;
+
+exports[`test should log a lint without lower case error 1`] = `
+Object {
+  "syntax": Object {
+    "error": Array [
+      Object {
+        "filePath": "./__tests__/single-file/syntax.scss",
+        "line": 26,
+        "message": "\".syntax---big\" modifier should have only 2 dashes.",
+      },
+      Object {
+        "filePath": "./__tests__/single-file/syntax.scss",
+        "line": 31,
+        "message": "\".syntax--big--light\" should have a single modifier.",
+      },
+      Object {
+        "filePath": "./__tests__/single-file/syntax.scss",
+        "line": 45,
+        "message": "\".syntax--big__close\" represents an element of a modifier, it should be cut in 2 classes.",
+      },
+      Object {
+        "filePath": "./__tests__/single-file/syntax.scss",
+        "line": 54,
+        "message": "\".syntax__header__logo\" should have a single depth of element.",
+      },
+      Object {
+        "filePath": "./__tests__/single-file/syntax.scss",
+        "line": 58,
+        "message": "\".syntax___footer\" element should have only 2 underscores.",
+      },
+    ],
+    "info": Array [
+      Object {
+        "filePath": "./__tests__/single-file/syntax.scss",
+        "line": null,
+        "message": "Parsed",
       },
     ],
   },
