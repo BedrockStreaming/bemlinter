@@ -51,12 +51,14 @@ new Promise(resolve => {
   fs.readFile(argv.config, {encoding:'utf8'})
     .then(data => JSON.parse(data))
     .then(config => {
-      config.excludePath = config.excludePath.map(filePath => `!${path.resolve(filePath)}`);
+      config.excludePath = (config.excludePath || [])
+        .map(filePath => `!${path.resolve(filePath)}`);
       config.sources = config.sources
         .map(filePath => path.resolve(filePath))
         .concat(config.excludePath)
       ;
-      config.excludeComponent = config.excludeComponent.map(component => `**/${component}.scss`);
+      config.excludeComponent = (config.excludeComponent || [])
+        .map(component => `**/${component}.scss`);
       resolve({
         sources: config.sources,
         options: _.omit(config, 'sources')
