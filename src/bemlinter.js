@@ -133,7 +133,7 @@ module.exports = (sources, userOptions = defaultOptions) => {
         if (isBlockWithAPseudoClass($(wrapper))) {
           addWarning(`".${className}" is tolerated in this stylesheet.`, filePath, blockName, wrapper);
         } else {
-          addError(`".${className}" should not be style outside of his own stylesheet.`, filePath, blockName, wrapper);
+          addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, blockName, wrapper);
         }
       }
     });

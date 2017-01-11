@@ -21,7 +21,7 @@ Object {
       Object {
         "filePath": "./__tests__/multiple-files/component.scss",
         "line": 8,
-        "message": "\".c-other-component\" should not be style outside of his own stylesheet.",
+        "message": "\".c-other-component\" should not be styled outside of its own stylesheet.",
       },
     ],
     "info": Array [
@@ -58,7 +58,7 @@ Object {
       Object {
         "filePath": "./__tests__/multiple-files/component.scss",
         "line": 8,
-        "message": "\".c-other-component\" should not be style outside of his own stylesheet.",
+        "message": "\".c-other-component\" should not be styled outside of its own stylesheet.",
       },
     ],
     "info": Array [
