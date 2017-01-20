@@ -1,32 +1,11 @@
 {
-  "name": "bemlinter.js",
-  "version": "0.7.2",
-  "description": "BEM linter",
-  "main": "index.js",
-  "bin": {
-    "bemlinter": "./src/cli.js"
-  },
-  "scripts": {
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tzi/bemlinter.js.git"
-  },
-  "keywords": [
-    "bem",
-    "lint",
-    "linter"
-  ],
-  "author": "Thomas ZILLIOX <http://tzi.fr>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tzi/bemlinter.js/issues"
-  },
-  "homepage": "https://github.com/tzi/bemlinter.js#readme",
+  "name": "bemlinter",
+  "version": "1.0.0",
+  "description": "A tool belt to lint bem components",
   "dependencies": {
     "colors": "^1.1.2",
     "globby": "^6.1.0",
+    "jest": "^18.1.0",
     "lodash": "^4.17.3",
     "minimist": "^1.2.0",
     "mz": "^2.6.0",
@@ -34,10 +13,20 @@
     "query-ast": "^1.0.0",
     "scss-parser": "^1.0.0"
   },
-  "engines": {
-    "node": ">=6"
-  },
   "devDependencies": {
-    "jest": "^18.1.0"
-  }
+    "lerna": "2.0.0-beta.32"
+  },
+  "scripts": {
+    "test": "lerna run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M6Web/bemlinter.git"
+  },
+  "author": "Thomas ZILLIOX <http://tzi.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/M6Web/bemlinter/issues"
+  },
+  "homepage": "https://github.com/M6Web/bemlinter#readme"
 }
