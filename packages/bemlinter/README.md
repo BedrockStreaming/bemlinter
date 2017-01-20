@@ -13,7 +13,7 @@ Quick start
 ------
 
 ```sh
-npm i bemlinter.js --save
+npm i bemlinter --save
 ```
 
 You can set your `package.json` to use bemlinter:
@@ -113,16 +113,16 @@ default: `['']`
 How to Contribute
 --------
 
-1. [Star](https://github.com/tzi/bemlinter.js/stargazers) the project!
-2. [Report a bug](https://github.com/tzi/bemlinter.js/issues/new) that you have found.
-3. Tweet or blog about sass-test.sh and [Let me know](https://twitter.com/iamtzi) about it.
+1. [Star](https://github.com/M6Web/bemlinter/stargazers) the project!
+2. [Report a bug](https://github.com/M6Web/bemlinter/issues/new) that you have found.
+3. Tweet or blog about bemlinter and [let us know](https://twitter.com/TechM6Web) about it.
 4. Pull requests are also highly appreciated.
 
 
 Author & Community
 --------
 
-bemlinter.js is under [MIT License](http://tzi.mit-license.org/).<br>
-It was created & is maintained by [Thomas ZILLIOX](http://tzi.fr).
+bemlinter is under [MIT License](http://tzi.mit-license.org/).<br>
+It was created & is maintained by [Thomas ZILLIOX](http://tzi.fr) for M6Web.
 
 
