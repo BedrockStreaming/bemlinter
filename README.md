@@ -1,16 +1,12 @@
 bemlinter
 ======
 
-A tool belt to lint bem components.
+A tool belt to lint bem components:
 
- 
-Tools
-------
-
- * [bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/bemlinter/README.md)
+ * ![Build Status](https://travis-ci.org/M6Web/bemlinter.svg?branch=master) [bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/bemlinter/README.md): A cli tool to lint bem component isolation in SCSS files
 
 
-For developers
+To developers
 ------
 
 It's a monorepo managed with [lerna](https://lernajs.io/):
@@ -22,5 +18,5 @@ npm install --global lerna@^2.0.0-beta
 To launch tests:
 
 ```sh
-lerna run tests
+lerna run test
 ```
