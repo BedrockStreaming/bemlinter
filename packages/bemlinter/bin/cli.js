@@ -5,7 +5,7 @@ const fs = require('mz/fs');
 const path = require('path');
 const colors = require('colors');
 const minimist = require('minimist');
-const bemlinter = require('./bemlinter');
+const bemlinter = require('./../src/bemlinter');
 
 // Output
 function getContextualMessage(message, filePath, line) {

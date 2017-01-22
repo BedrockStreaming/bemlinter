@@ -1,8 +1,8 @@
-const bemlinter = require('./../../src/bemlinter');
+const {lint} = require('../../src/bemlinter.js');
 
 describe('Bemlinter of alright.scss', () => {
   it('should lint without error', (done) => {
-    bemlinter(`${__dirname}/alright.scss`)
+    lint(`${__dirname}/alright.scss`)
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
@@ -12,7 +12,7 @@ describe('Bemlinter of alright.scss', () => {
 
 describe('Bemlinter of prefix.scss', () => {
   it('should lint with a missing prefix error', (done) => {
-    bemlinter(`${__dirname}/prefix.scss`, {prefix: ['c-']})
+    lint(`${__dirname}/prefix.scss`, {prefix: ['c-']})
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
@@ -20,7 +20,7 @@ describe('Bemlinter of prefix.scss', () => {
   });
   
   it('should lint without error', (done) => {
-    bemlinter(`${__dirname}/prefix.scss`, {prefix: ['', 'c-']})
+    lint(`${__dirname}/prefix.scss`, {prefix: ['', 'c-']})
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
@@ -30,7 +30,7 @@ describe('Bemlinter of prefix.scss', () => {
 
 describe('Bemlinter of leak.scss', () => {
   it('should lint with a leak error', (done) => {
-    bemlinter(`${__dirname}/leak.scss`)
+    lint(`${__dirname}/leak.scss`)
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
@@ -40,7 +40,7 @@ describe('Bemlinter of leak.scss', () => {
 
 describe('Bemlinter of syntax.scss', () => {
   it('should lint with 6 different syntax error', (done) => {
-    bemlinter(`${__dirname}/syntax.scss`)
+    lint(`${__dirname}/syntax.scss`)
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
@@ -48,7 +48,7 @@ describe('Bemlinter of syntax.scss', () => {
   });
   
   it('should lint without a lower case error', (done) => {
-    bemlinter(`${__dirname}/syntax.scss`, {checkLowerCase: false})
+    lint(`${__dirname}/syntax.scss`, {checkLowerCase: false})
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();

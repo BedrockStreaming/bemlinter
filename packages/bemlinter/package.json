@@ -2,6 +2,7 @@
   "name": "bemlinter",
   "version": "1.0.0",
   "description": "A cli tool to lint bem component isolation in SCSS files",
+  "main": "./src/bemlinter.js",
   "bin": {
     "bemlinter": "./src/cli.js"
   },

@@ -1,8 +1,8 @@
-const bemlinter = require('./../../src/bemlinter');
+const {lint} = require('../../src/bemlinter.js');
 
 describe('Bemlinter of multiple files', () => {
   it('should lint with crossed error', (done) => {
-    bemlinter(`${__dirname}/*.scss`, {prefix: ['c-']})
+    lint(`${__dirname}/*.scss`, {prefix: ['c-']})
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
@@ -10,7 +10,7 @@ describe('Bemlinter of multiple files', () => {
   });
   
   it('should lint with crossed error', (done) => {
-    bemlinter(`${__dirname}/*.scss`, {prefix: ['', 'c-']})
+    lint(`${__dirname}/*.scss`, {prefix: ['', 'c-']})
       .then(logs => {
         expect(logs).toMatchSnapshot();
         done();
