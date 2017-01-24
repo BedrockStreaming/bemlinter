@@ -2,7 +2,7 @@ const _ = require('lodash');
 const path = require('path');
 const {lint, format} = require('bemlinter');
 const through = require('through2');
-const PluginError = require('gulp-util').PluginError;
+const {PluginError} = require('gulp-util');
 const PLUGIN_NAME = 'bemlinter';
 
 // Settings
