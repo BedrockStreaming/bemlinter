@@ -9,18 +9,25 @@ const createQueryAst = require('query-ast');
 const createBem = require('./bem.js');
 const createResult = require('./result.js');
 
-// Utils
-function groupByAndOmit(haystack, needle) {
-  return _.mapValues(_.groupBy(haystack, needle), values => values.map(value => _.omit(value, needle)));
-}
-
+// AST
 function eachWrapper(wrapper, fn) {
   for (let n of wrapper.nodes) { fn(n) }
 }
 
+function eachClassName($, fn) {
+  eachWrapper($('class').find('identifier'), wrapper => {
+    const className = wrapper.node.value;
+    fn(className, wrapper);
+  });
+}
+
+function isClassFollowedByAPseudoClass($wrapper) {
+  return $wrapper.parent().next().get(0).type === 'pseudo_class';
+}
+
 // Settings
 const defaultOptions = {
-  excludeComponent: [],
+  excludeBlock: [],
   checkLowerCase: true,
   prefix: ['']
 };
@@ -31,29 +38,28 @@ module.exports = (sources, userOptions = defaultOptions) => {
   const options = _.merge({}, defaultOptions, userOptions);
   const classPrefixList = _.reverse(_.sortBy(options.prefix));
   const bem = createBem(classPrefixList);
-  const blockList = globby.sync(sources, {
-    ignore: options.excludeComponent
-  }).map(bem.getBlockNameFromFile);
+  const filePathList = globby.sync(sources);
+  const blockList = _.filter(
+    filePathList.map(bem.getBlockNameFromFile),
+    blockName => options.excludeBlock.indexOf(blockName) === -1
+  );
 
   return bemLintProject();
 
   // Main
   function bemLintProject() {
-    const filePathList = globby.sync(sources);
     
     return Promise.all(filePathList.map(filePath => bemLintFile(filePath)))
-      .then(() => {
-        return _.mapValues(
-          groupByAndOmit(_.flatten(result.getLogs()), 'blockName'),
-          blockLog => groupByAndOmit(blockLog, 'type')
-        );
-      })
+      .then(() => result)
       .catch(console.error)
     ;
   }
   
   function bemLintFile(filePath) {
     const blockName = bem.getBlockNameFromFile(filePath);
+    if (blockList.indexOf(blockName) !== -1) {
+      result.addBlock(blockName);
+    }
 
     return fs.readFile(filePath, {encoding:'utf8'})
       .then(data => {
@@ -65,22 +71,21 @@ module.exports = (sources, userOptions = defaultOptions) => {
           checkInternalClassName($, filePath, blockName);
         }
         checkExternalClassName($, filePath, blockName);
-        result.addInfo('Parsed', filePath, blockName);
       })
       .catch(error => {
         result.addError('Impossible to parse source file', filePath, blockName);
         console.error(error);
-      })
-      ;
+      });
   }
 
   // Checker
   function checkInternalClassName($, filePath, blockName) {
-    eachWrapper($('class').find('identifier'), wrapper => {
-      const className = wrapper.node.value;
+    eachClassName($, (className, wrapper) => {
       if (!bem.isBlockName(className, blockName)) {
         if (bem.isClassPrefixMissing(className, blockName)) {
-          result.addError(`".${className}" should have a component prefix.`, filePath, blockName, wrapper);
+          result.addError(`".${className}" should have a block prefix.`, filePath, blockName, wrapper);
+        } else if (isClassFollowedByAPseudoClass($(wrapper))) {
+          result.addWarning(`".${className}" is only tolerated in this stylesheet.`, filePath, blockName, wrapper);
         } else {
           result.addError(`".${className}" is incoherent with the file name.`, filePath, blockName, wrapper);
         }
@@ -89,22 +94,16 @@ module.exports = (sources, userOptions = defaultOptions) => {
   }
 
   function checkExternalClassName($, filePath, authorizedBlockName) {
-    eachWrapper($('class').find('identifier'), wrapper => {
-      const className = wrapper.node.value;
+    eachClassName($, (className, wrapper) => {
       if (bem.isAnotherBlockName(className, blockList, authorizedBlockName)) {
         const blockName = bem.getBlockNameFromClass(className);
-        if (bem.isBlockWithAPseudoClass($(wrapper))) {
-          result.addWarning(`".${className}" is tolerated in this stylesheet.`, filePath, blockName, wrapper);
-        } else {
-          result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, blockName, wrapper);
-        }
+        result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, blockName, wrapper);
       }
     });
   }
 
   function checkBemSyntaxClassName($, filePath, blockName) {
-    eachWrapper($('class').find('identifier'), wrapper => {
-      const className = wrapper.node.value;
+    eachClassName($, (className, wrapper) => {
       if (options.checkLowerCase && className !== className.toLowerCase()) {
         result.addError(`".${className}" should be in lower case.`, filePath, blockName, wrapper);
       }

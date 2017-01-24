@@ -4,7 +4,7 @@
   "description": "A cli tool to lint bem component isolation in SCSS files",
   "main": "./src/bemlinter.js",
   "bin": {
-    "bemlinter": "./src/cli.js"
+    "bemlinter": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"

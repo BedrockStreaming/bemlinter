@@ -5,8 +5,8 @@ A cli tool to lint bem component isolation in SCSS files
 
 The main rules are: 
 
- 1. A SCSS component should only contain its own classes
- 2. A SCSS file, even if it is not a component, should not style a class of another component
+ 1. A SCSS block file should only contain its own classes
+ 2. A SCSS file, even if it is not a block, should not style a class of another block
 
  
 Quick start
@@ -69,15 +69,15 @@ default: `[]`
 }
 ```
 
-### excludeComponent (option)
+### excludeBlock (option)
 
-To define the names of some component that are not isolated yet, so the linter will be kind ;)
+To define the names of some block that are not isolated yet, so the linter will be kind ;)
 
 default: `[]`
 
 ```json
 {
-  "excludeComponent": [
+  "excludeBlock": [
     "messed-up-component",
     "disorder-file",
     "old-component"

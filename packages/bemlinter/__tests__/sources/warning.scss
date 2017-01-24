@@ -1,4 +1,4 @@
-.leak {
+.warning {
   display: block;
   position: absolute;
   z-index: 10;
@@ -6,10 +6,6 @@
   transform: translateY(-50%);
   width: 29px;
   height: 29px;
-  
-  .external-component {
-    display: none;
-  }
 
   &::after {
     content: '';
@@ -22,15 +18,6 @@
   }
 }
 
-.leak--big {
-  width: 64px;
-  height: 64px;
-}
-
-.leak__close {
-  position: absolute;
-  top: 14px;
-  right: 15px;
-  
-  background-image: url('/assets/close.svg');
+.external-block:hover .warning {
+  opacity: 0.8;
 }

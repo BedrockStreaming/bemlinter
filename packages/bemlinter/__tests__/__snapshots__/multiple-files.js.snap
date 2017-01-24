@@ -1,0 +1,15 @@
+exports[`Bemlinter of multiple files should lint with crossed error 1`] = `
+"  ✗ block
+[block.scss:8] Error: \".c-other-block\" is incoherent with the file name.
+  ✗ other-block
+[block.scss:8] Error: \".c-other-block\" should not be styled outside of its own stylesheet.
+
+FAIL: bemlinter has detected 2 errors on 2 blocks."
+`;
+
+exports[`Bemlinter of multiple files should lint without the crossed error on the excluded block 1`] = `
+"  ✗ block
+[block.scss:8] Error: \".c-other-block\" is incoherent with the file name.
+
+FAIL: bemlinter has detected 1 error on 1 block."
+`;

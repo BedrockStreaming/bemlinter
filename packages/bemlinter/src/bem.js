@@ -18,10 +18,6 @@ module.exports = function (classPrefixList) {
     return blockName.slice(prefix.length);
   }
 
-  function isBlockWithAPseudoClass($wrapper) {
-    return $wrapper.parent().next().get(0).type === 'pseudo_class';
-  }
-
   function isBlockName(className, blockName, withPrefixList = classPrefixList) {
     return _.some(withPrefixList, prefix => {
       const prefixedBlockName = `${prefix}${blockName}`;
@@ -34,7 +30,6 @@ module.exports = function (classPrefixList) {
   }
 
   function isClassPrefixMissing(className, blockName) {
-    console.log({blockName, classPrefixList});
     return (
       classPrefixList.indexOf('') === -1 &&
       isBlockName(className, blockName, [''])
@@ -53,7 +48,6 @@ module.exports = function (classPrefixList) {
   return {
     getBlockNameFromFile,
     getBlockNameFromClass,
-    isBlockWithAPseudoClass,
     isBlockName,
     isClassPrefixMissing,
     isAnotherBlockName

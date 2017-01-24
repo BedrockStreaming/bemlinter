@@ -1,9 +1,8 @@
 TODO
 ======
 
-Multi-file tests 
+Features
 ------
 
- * [ ] Create a test for a tolerated dependency (warning)
- * [ ] Create a test for a block style in another stylesheet (error)
- 
+ * [ ] filePrefix option
+ * [ ] fileSufix option

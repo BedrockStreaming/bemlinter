@@ -1,11 +1,11 @@
-.c-component {
+.c-block {
   display: block;
   position: absolute;
   z-index: 10;
   top: 50%;
   transform: translateY(-50%);
 
-  .c-other-component {
+  .c-other-block {
     display: none;
   }
 }
