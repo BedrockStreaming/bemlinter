@@ -33,9 +33,9 @@ const bemlinter = function (options = {}) {
   });
 };
 
-bemlinter.format = function (media = console.log) {
+bemlinter.format = function (withColor = true, media = console.log) {
   return through.obj(function (lintLogs, encoding, done) {
-    media(format(lintLogs));
+    media(format(lintLogs, withColor));
 
     this.push(lintLogs);
     done();

@@ -2,7 +2,7 @@ exports[`Bemlinter of alright.scss should lint without error 1`] = `"OK: bemlint
 
 exports[`Bemlinter of alright.scss should warn the use of an external block 1`] = `
 "  ✓ warning
-[warning.scss:21] Warning: \".external-block\" is tolerated in this stylesheet.
+[warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
 
 OK: bemlinter has validated 1 block."
 `;
