@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/M6Web/bemlinter.git"
   },
-  "author": "Thomas ZILLIOX <http://tzi.fr>",
+  "author": "Thomas ZILLIOX (http://tzi.fr)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/M6Web/bemlinter/issues"

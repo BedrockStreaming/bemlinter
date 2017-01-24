@@ -19,7 +19,7 @@
     "linter",
     "cli"
   ],
-  "author": "Thomas ZILLIOX <http://tzi.fr>",
+  "author": "Thomas ZILLIOX (http://tzi.fr)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/M6Web/bemlinter/issues"
