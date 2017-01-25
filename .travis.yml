@@ -1,4 +1,17 @@
+sudo: false
 language: node_js
 node_js:
   - '6'
   - '7'
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install -g lerna@^2.0.0-beta
+  - lerna bootstrap
+  - npm install
+
+script:
+  - npm run test
