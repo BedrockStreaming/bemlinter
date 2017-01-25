@@ -22,7 +22,6 @@ new Promise(resolve => {
       config.sources = config.sources
         .map(filePath => path.resolve(basePath, filePath))
         .concat(config.excludePath);
-      console.log(config.sources);
       resolve({
         sources: config.sources,
         options: _.omit(config, 'sources', 'excludePath')
