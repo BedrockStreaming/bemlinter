@@ -8,7 +8,10 @@ describe('gulp-bemlinter', () => {
       done();
     };
     
-    gulp.src('../bemlinter/__tests__/sources/*.scss')
+    gulp.src([
+        '../bemlinter/__tests__/sources/*.scss',
+        '!../bemlinter/__tests__/sources/ProjectAlright.scss'
+      ])
       .pipe(bemlinter())
       .pipe(bemlinter.format(false, spy));
   });

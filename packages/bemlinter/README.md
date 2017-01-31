@@ -109,6 +109,20 @@ default: `['']`
 }
 ```
 
+### filePattern (option)
+
+Regexp used to retrieve the block name from the file name
+
+:warning: Your regexp should contain only one capturing group
+
+default: `'([^.]*)\.scss'`
+
+```json
+{
+  "filePattern": "(?:project-)?([^.]*)\.scss"
+}
+```
+
 
 How to Contribute
 --------
