@@ -18,7 +18,13 @@ describe('Bemlinter of alright.scss', () => {
   it('should lint without error', done => snap(`alright.scss`, done));
 });
 
-describe('Bemlinter of alright.scss', () => {
+describe('Bemlinter of ProjectAlright.scss', () => {
+  it('should lint without error', done => snap(`ProjectAlright.scss`, done, {
+    filePattern: '(?:Project)?([^.]*)\.scss'
+  }));
+});
+
+describe('Bemlinter of warning.scss', () => {
   it('should warn the use of an external block', done => snap(`warning.scss`, done));
 });
 

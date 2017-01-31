@@ -1,11 +1,6 @@
+exports[`Bemlinter of ProjectAlright.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
+
 exports[`Bemlinter of alright.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
-
-exports[`Bemlinter of alright.scss should warn the use of an external block 1`] = `
-"  ✓ warning
-[warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
-
-OK: bemlinter has validated 1 block."
-`;
 
 exports[`Bemlinter of leak.scss should lint with a leak error 1`] = `
 "  ✗ leak
@@ -44,4 +39,11 @@ exports[`Bemlinter of syntax.scss should lint without a lower case error 1`] = `
 [syntax.scss:53] Error: \".syntax___footer\" element should have only 2 underscores.
 
 FAIL: bemlinter has detected 5 errors on 1 block."
+`;
+
+exports[`Bemlinter of warning.scss should warn the use of an external block 1`] = `
+"  ✓ warning
+[warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
+
+OK: bemlinter has validated 1 block."
 `;

@@ -29,7 +29,8 @@ function isClassFollowedByAPseudoClass($wrapper) {
 const defaultOptions = {
   excludeBlock: [],
   checkLowerCase: true,
-  classPrefix: ['']
+  classPrefix: [''],
+  filePattern: '([^.]*)\.scss'
 };
 
 // Exports
@@ -37,7 +38,7 @@ module.exports = (sources, userOptions = defaultOptions) => {
   const result = createResult();
   const options = _.merge({}, defaultOptions, userOptions);
   const classPrefixList = _.reverse(_.sortBy(options.classPrefix));
-  const bem = createBem(classPrefixList);
+  const bem = createBem(classPrefixList, new RegExp(options.filePattern));
   const filePathList = globby.sync(sources);
   const blockList = _.filter(
     filePathList.map(bem.getBlockNameFromFile),
