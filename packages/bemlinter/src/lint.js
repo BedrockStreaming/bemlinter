@@ -29,14 +29,14 @@ function isClassFollowedByAPseudoClass($wrapper) {
 const defaultOptions = {
   excludeBlock: [],
   checkLowerCase: true,
-  prefix: ['']
+  classPrefix: ['']
 };
 
 // Exports
 module.exports = (sources, userOptions = defaultOptions) => {
   const result = createResult();
   const options = _.merge({}, defaultOptions, userOptions);
-  const classPrefixList = _.reverse(_.sortBy(options.prefix));
+  const classPrefixList = _.reverse(_.sortBy(options.classPrefix));
   const bem = createBem(classPrefixList);
   const filePathList = globby.sync(sources);
   const blockList = _.filter(
