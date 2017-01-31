@@ -11,16 +11,16 @@ module.exports = function (classPrefixList) {
 
   function getBlockNameFromClass(className) {
     const blockName = className.split('__')[0].split('--')[0];
-    const prefix = _.find(classPrefixList, prefix => _.startsWith(className, prefix));
-    if (!prefix) {
+    const currentClassPrefix = _.find(classPrefixList, classPrefix => _.startsWith(className, classPrefix));
+    if (!currentClassPrefix) {
       return blockName;
     }
-    return blockName.slice(prefix.length);
+    return blockName.slice(currentClassPrefix.length);
   }
 
   function isBlockName(className, blockName, withPrefixList = classPrefixList) {
-    return _.some(withPrefixList, prefix => {
-      const prefixedBlockName = `${prefix}${blockName}`;
+    return _.some(withPrefixList, classPrefix => {
+      const prefixedBlockName = `${classPrefix}${blockName}`;
       return (
         className === prefixedBlockName ||
         _.startsWith(className, `${prefixedBlockName}--`) ||

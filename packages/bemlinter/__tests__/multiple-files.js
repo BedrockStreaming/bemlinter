@@ -15,10 +15,10 @@ const snap = (fileName, done, options = {}) => {
 };
 
 describe('Bemlinter of multiple files', () => {
-  it('should lint with crossed error', done => snap('cross-styling/*.scss', done, {prefix: ['c-']}));
+  it('should lint with crossed error', done => snap('cross-styling/*.scss', done, {classPrefix: ['c-']}));
   
   it('should lint without the crossed error on the excluded block', done => snap('cross-styling/*.scss', done, {
     excludeBlock: ['other-block'],
-    prefix: ['c-']
+    classPrefix: ['c-']
   }));
 });

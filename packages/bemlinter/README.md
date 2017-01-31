@@ -97,15 +97,15 @@ default: `true`
 }
 ```
 
-### prefix (option)
+### classPrefix (option)
  
-To set the authorized prefix
+To set the authorized class prefix
 
 default: `['']`
 
 ```json
 {
-  "prefix": ["c-"]
+  "classPrefix": ["c-"]
 }
 ```
 
