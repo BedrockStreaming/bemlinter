@@ -1,5 +1,8 @@
 exports[`gulp-bemlinter should lint 1`] = `
-"  ✗ leak
+"  ✗ class-concat
+[class-concat.scss:23] Error: \"&__close\" should not concatenate classes.
+[class-concat.scss:31] Error: \"&--big\" should not concatenate classes.
+  ✗ leak
 [leak.scss:10] Error: \".external-block\" is incoherent with the file name.
   ✗ prefix
 [prefix.scss:1] Error: \".c-prefix\" is incoherent with the file name.
@@ -14,5 +17,5 @@ exports[`gulp-bemlinter should lint 1`] = `
   ✓ warning
 [warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
 
-FAIL: bemlinter has detected 9 errors on 3 blocks."
+FAIL: bemlinter has detected 11 errors on 4 blocks."
 `;

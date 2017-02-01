@@ -47,3 +47,7 @@ describe('Bemlinter of syntax.scss', () => {
   
   it('should lint without a lower case error', done => snap(`syntax.scss`, done, {checkLowerCase: false}));
 });
+
+describe('Bemlinter of class-concat.scss', () => {
+  it('should detect class concatenation', done => snap(`class-concat.scss`, done));
+});

@@ -14,6 +14,10 @@ function eachWrapper(wrapper, fn) {
   for (let n of wrapper.nodes) { fn(n) }
 }
 
+function nodeToString(node) {
+  return typeof node.value === 'string' ? node.value : node.value.reduce((acc, child) => acc + nodeToString(child), '');
+}
+
 function eachClassName($, fn) {
   eachWrapper($('class').find('identifier'), wrapper => {
     const className = wrapper.node.value;
@@ -67,6 +71,7 @@ module.exports = (sources, userOptions = defaultOptions) => {
         const ast = parse(data);
         const $ = createQueryAst(ast);
 
+        checkSelector($, filePath, blockName);
         checkBemSyntaxClassName($, filePath, blockName);
         if (blockList.indexOf(blockName) !== -1) {
           checkInternalClassName($, filePath, blockName);
@@ -122,6 +127,23 @@ module.exports = (sources, userOptions = defaultOptions) => {
       }
       if (/--[^-]+__/.test(className)) {
         result.addError(`".${className}" represents an element of a modifier, it should be cut in 2 classes.`, filePath, blockName, wrapper);
+      }
+    });
+  }
+  
+  function checkSelector($, filePath, blockName) {
+    eachWrapper($('operator'), wrapper => {
+      if (wrapper.node.value !== '&') {
+        return true;
+      }
+      const next = $(wrapper).next();
+      if (!next.length()) {
+        return true;
+      }
+      const nextNodeType = next.get(0).type;
+      if (['space', 'punctuation', 'class', 'id'].indexOf(nextNodeType) === -1) {
+        const selector = nodeToString(next.parent().get(0)).trim();
+        result.addError(`"${selector}" should not concatenate classes.`, filePath, blockName, wrapper);
       }
     });
   }
