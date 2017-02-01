@@ -14,7 +14,7 @@
     "scss-parser": "^1.0.0"
   },
   "devDependencies": {
-    "lerna": "2.0.0-beta.32"
+    "lerna": "2.0.0-beta.34"
   },
   "scripts": {
     "test": "lerna run test"
