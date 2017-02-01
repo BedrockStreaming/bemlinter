@@ -30,7 +30,7 @@ const defaultOptions = {
   excludeBlock: [],
   checkLowerCase: true,
   classPrefix: [''],
-  filePattern: '([^.]*)\.scss'
+  filePattern: '([^.]*)\.s?css'
 };
 
 // Exports

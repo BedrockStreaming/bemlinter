@@ -1,7 +1,7 @@
 bemlinter [![Build Status](https://travis-ci.org/M6Web/bemlinter.svg?branch=master)](https://travis-ci.org/M6Web/bemlinter)
 ======
 
-A gulp plugin to lint bem component isolation in SCSS files.
+A gulp plugin to lint bem component isolation in CSS / SCSS files.
 
 This project is a wrapper of [bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/bemlinter/README.md) project. 
  

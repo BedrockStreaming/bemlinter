@@ -1,12 +1,12 @@
 bemlinter [![Build Status](https://travis-ci.org/M6Web/bemlinter.svg?branch=master)](https://travis-ci.org/M6Web/bemlinter)
 ======
 
-A cli tool to lint bem component isolation in SCSS files
+A cli tool to lint bem component isolation in CSS / SCSS files
 
 The main rules are: 
 
- 1. A SCSS block file should only contain its own classes
- 2. A SCSS file, even if it is not a block, should not style a class of another block
+ 1. A CSS block file should only contain its own classes
+ 2. A CSS file, even if it is not a block, should not style a class of another block
 
  
 Quick start
@@ -115,7 +115,7 @@ Regexp used to retrieve the block name from the file name
 
 :warning: Your regexp should contain only one capturing group
 
-default: `'([^.]*)\.scss'`
+default: `'([^.]*)\.s?css'`
 
 ```json
 {

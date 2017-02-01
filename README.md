@@ -3,8 +3,8 @@ bemlinter [![Build Status](https://travis-ci.org/M6Web/bemlinter.svg?branch=mast
 
 A tool belt to lint bem components:
 
- * [bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/bemlinter/README.md): A cli tool to lint bem component isolation in SCSS files
- * [gulp-bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/gulp-bemlinter/README.md): A gulp plugin to lint bem component isolation in SCSS files
+ * [bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/bemlinter/README.md): A cli tool to lint bem component isolation in CSS / SCSS files
+ * [gulp-bemlinter](https://github.com/M6Web/bemlinter/blob/master/packages/gulp-bemlinter/README.md): A gulp plugin to lint bem component isolation in CSS / SCSS files
 
 
 To developers
