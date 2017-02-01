@@ -38,6 +38,10 @@ describe('Bemlinter of leak.scss', () => {
   it('should lint with a leak error', done => snap(`leak.scss`, done));
 });
 
+describe('Bemlinter of leak.css', () => {
+  it('should lint with a leak error', done => snap(`leak.css`, done));
+});
+
 describe('Bemlinter of syntax.scss', () => {
   it('should lint with 6 different syntax error', done => snap(`syntax.scss`, done));
   
