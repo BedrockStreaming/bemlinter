@@ -2,6 +2,14 @@ exports[`Bemlinter of ProjectAlright.scss should lint without error 1`] = `"OK: 
 
 exports[`Bemlinter of alright.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
 
+exports[`Bemlinter of class-concat.scss should detect class concatenation 1`] = `
+"  ✗ class-concat
+[class-concat.scss:23] Error: \"&__close\" should not concatenate classes.
+[class-concat.scss:31] Error: \"&--big\" should not concatenate classes.
+
+FAIL: bemlinter has detected 2 errors on 1 block."
+`;
+
 exports[`Bemlinter of leak.css should lint with a leak error 1`] = `
 "  ✗ leak
 [leak.css:11] Error: \".external-block\" is incoherent with the file name.
