@@ -10,8 +10,10 @@ module.exports = function (options) {
     const match = blockRegExp.exec(fileName);
     if (!match) {
       console.error(`No block name found for this ${fileName}. Is your filePattern option correct?`);
+      return fileName;
     } else if (match.length > 2) {
       console.error('Only one capturing group is authorized in filePattern!');
+      return fileName;
     }
 
     return paramCase(match[1]);

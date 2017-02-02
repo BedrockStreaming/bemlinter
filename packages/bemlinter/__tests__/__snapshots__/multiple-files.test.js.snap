@@ -1,15 +1,31 @@
-exports[`Bemlinter of multiple files should lint with crossed error 1`] = `
-"  ✗ block
-[block.scss:8] Error: \".c-other-block\" is incoherent with the file name.
-  ✗ other-block
-[block.scss:8] Error: \".c-other-block\" should not be styled outside of its own stylesheet.
+exports[`Bemlinter of crossed styled files should log error on both blocks 1`] = `
+"  ✗ external
+[leak.scss:8] Error: \".c-external\" should not be styled outside of its own stylesheet.
+  ✗ leak
+[leak.scss:8] Error: \".c-external\" is incoherent with the file name.
 
 FAIL: bemlinter has detected 2 errors on 2 blocks."
 `;
 
-exports[`Bemlinter of multiple files should lint without the crossed error on the excluded block 1`] = `
-"  ✗ block
-[block.scss:8] Error: \".c-other-block\" is incoherent with the file name.
+exports[`Bemlinter of crossed styled files should not log error on the external block 1`] = `
+"  ✗ leak
+[leak.scss:8] Error: \".c-external\" is incoherent with the file name.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
+
+exports[`Bemlinter of mixed settings files should detect the project 1`] = `
+"  ✗ prefixed
+[project-prefixed.scss:1] Error: \".c-prefixed\" is incoherent with the file name.
+
+FAIL: bemlinter has detected 1 error on 1 block."
+`;
+
+exports[`Bemlinter of mixed settings files should lint a block on error 1`] = `
+"  ✗ project-prefixed
+[project-prefixed.scss:1] Error: \".c-prefixed\" is incoherent with the file name.
+
+FAIL: bemlinter has detected 1 error on 1 block."
+`;
+
+exports[`Bemlinter of mixed settings files should lint without the prefix error 1`] = `"OK: bemlinter has validated 2 blocks."`;

@@ -14,11 +14,32 @@ const snap = (fileName, done, options = {}) => {
   ;
 };
 
-describe('Bemlinter of multiple files', () => {
-  it('should lint with crossed error', done => snap('cross-styling/*.scss', done, {classPrefix: ['c-']}));
+describe('Bemlinter of crossed styled files', () => {
+  it('should log error on both blocks', done => snap('cross-styling/*.scss', done, {classPrefix: ['c-']}));
   
-  it('should lint without the crossed error on the excluded block', done => snap('cross-styling/*.scss', done, {
-    excludeBlock: ['other-block'],
+  it('should not log error on the external block', done => snap('cross-styling/*.scss', done, {
+    excludeBlock: ['external'],
     classPrefix: ['c-']
+  }));
+});
+
+describe('Bemlinter of mixed settings files', () => {
+  it('should lint a block on error', done => snap('mixed-settings/*.scss', done));
+
+  it('should detect the project', done => snap('mixed-settings/*.scss', done, {
+    project: [{
+      name: 'project',
+      sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],
+      filePattern: 'project-([^.]*)\.scss'
+    }]
+  }));
+
+  it('should lint without the prefix error', done => snap('mixed-settings/*.scss', done, {
+    project: [{
+      name: 'project',
+      sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],
+      classPrefix: ['c-'],
+      filePattern: 'project-([^.]*)\.scss'
+    }]
   }));
 });
