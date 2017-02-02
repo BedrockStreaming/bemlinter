@@ -8,6 +8,7 @@ const createQueryAst = require('query-ast');
 // Local
 const createBem = require('./bem.js');
 const createResult = require('./result.js');
+const createOptions = require('./options.js');
 
 // AST
 function eachWrapper(wrapper, fn) {
@@ -29,20 +30,11 @@ function isClassFollowedByAPseudoClass($wrapper) {
   return $wrapper.parent().next().get(0).type === 'pseudo_class';
 }
 
-// Settings
-const defaultOptions = {
-  excludeBlock: [],
-  checkLowerCase: true,
-  classPrefix: [''],
-  filePattern: '([^.]*)\.s?css'
-};
-
 // Exports
-module.exports = (sources, userOptions = defaultOptions) => {
+module.exports = (sources, userOptions = {}) => {
   const result = createResult();
-  const options = _.merge({}, defaultOptions, userOptions);
-  const classPrefixList = _.reverse(_.sortBy(options.classPrefix));
-  const bem = createBem(classPrefixList, new RegExp(options.filePattern));
+  const options = createOptions(userOptions);
+  const bem = createBem(options);
   const filePathList = globby.sync(sources);
   const blockList = _.filter(
     filePathList.map(bem.getBlockNameFromFile),
