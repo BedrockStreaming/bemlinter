@@ -2,7 +2,8 @@ const _ = require('lodash');
 const path = require('path');
 const paramCase = require('param-case');
 
-module.exports = function (classPrefixList, blockRegExp) {
+module.exports = function (options) {
+  const blockRegExp = new RegExp(options.filePattern);
   
   function getBlockNameFromFile(filePath) {
     const fileName = path.basename(filePath);
@@ -18,14 +19,14 @@ module.exports = function (classPrefixList, blockRegExp) {
 
   function getBlockNameFromClass(className) {
     const blockName = className.split('__')[0].split('--')[0];
-    const currentClassPrefix = _.find(classPrefixList, classPrefix => _.startsWith(className, classPrefix));
+    const currentClassPrefix = _.find(options.classPrefix, classPrefix => _.startsWith(className, classPrefix));
     if (!currentClassPrefix) {
       return blockName;
     }
     return blockName.slice(currentClassPrefix.length);
   }
 
-  function isBlockName(className, blockName, withPrefixList = classPrefixList) {
+  function isBlockName(className, blockName, withPrefixList = options.classPrefix) {
     return _.some(withPrefixList, classPrefix => {
       const prefixedBlockName = `${classPrefix}${blockName}`;
       return (
@@ -38,7 +39,7 @@ module.exports = function (classPrefixList, blockRegExp) {
 
   function isClassPrefixMissing(className, blockName) {
     return (
-      classPrefixList.indexOf('') === -1 &&
+      options.classPrefix.indexOf('') === -1 &&
       isBlockName(className, blockName, [''])
     );
   }
@@ -47,7 +48,7 @@ module.exports = function (classPrefixList, blockRegExp) {
     return _.some(blockList, blockName => {
       return (
         blockName !== actualBlockName &&
-        isBlockName(className, blockName, classPrefixList)
+        isBlockName(className, blockName, options.classPrefix)
       );
     });
   }
