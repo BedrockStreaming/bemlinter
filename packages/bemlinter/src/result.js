@@ -34,11 +34,11 @@ module.exports = function () {
 
   // Getter
   function getBlockList() {
-    return blockList;
+    return blockList.sort();
   }
   
   function getBlockListWithError() {
-    return _.filter(blockList, hasError);
+    return _.filter(getBlockList(), hasError);
   }
 
   function getErrorList(blockName = false) {

@@ -4,5 +4,5 @@ TODO
 Features
 ------
 
- * [ ] filePrefix option
- * [ ] fileSufix option
+ * [ ] Multi-projet
+ * [ ] Only one prefix by project to find a project by a prefix

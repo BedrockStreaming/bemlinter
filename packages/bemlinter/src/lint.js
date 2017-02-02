@@ -30,54 +30,30 @@ function isClassFollowedByAPseudoClass($wrapper) {
   return $wrapper.parent().next().get(0).type === 'pseudo_class';
 }
 
-// Exports
-module.exports = (sources, userOptions = {}) => {
-  const result = createResult();
-  const options = createOptions(userOptions);
-  const bem = createBem(options);
-  const filePathList = globby.sync(sources);
-  const blockList = _.filter(
-    filePathList.map(bem.getBlockNameFromFile),
-    blockName => options.excludeBlock.indexOf(blockName) === -1
-  );
+function getIsIsolatedBlock(fileOptions, blockName) {
+  return fileOptions.excludeBlock.indexOf(blockName) === -1;
+}
 
-  return bemLintProject();
-
-  // Main
-  function bemLintProject() {
-    
-    return Promise.all(filePathList.map(filePath => bemLintFile(filePath)))
-      .then(() => result)
-      .catch(console.error)
-    ;
+function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
+  const fileOptions = getFileOptions(filePath);
+  const bem = createBem(fileOptions);
+  const blockName = bem.getBlockNameFromFile(filePath);
+  const isIsolatedBlock = getIsIsolatedBlock(fileOptions, blockName);
+  if (isIsolatedBlock) {
+    result.addBlock(blockName);
   }
-  
-  function bemLintFile(filePath) {
-    const blockName = bem.getBlockNameFromFile(filePath);
-    if (blockList.indexOf(blockName) !== -1) {
-      result.addBlock(blockName);
-    }
+  const ast = parse(data);
+  const $ = createQueryAst(ast);
 
-    return fs.readFile(filePath, {encoding:'utf8'})
-      .then(data => {
-        const ast = parse(data);
-        const $ = createQueryAst(ast);
-
-        checkSelector($, filePath, blockName);
-        checkBemSyntaxClassName($, filePath, blockName);
-        if (blockList.indexOf(blockName) !== -1) {
-          checkInternalClassName($, filePath, blockName);
-        }
-        checkExternalClassName($, filePath, blockName);
-      })
-      .catch(error => {
-        result.addError('Impossible to parse source file', filePath, blockName);
-        console.error(error);
-      });
+  checkSelector();
+  checkBemSyntaxClassName();
+  if (isIsolatedBlock) {
+    checkInternalClassName();
   }
+  checkExternalClassName();
 
   // Checker
-  function checkInternalClassName($, filePath, blockName) {
+  function checkInternalClassName() {
     eachClassName($, (className, wrapper) => {
       if (!bem.isBlockName(className, blockName)) {
         if (bem.isClassPrefixMissing(className, blockName)) {
@@ -91,18 +67,18 @@ module.exports = (sources, userOptions = {}) => {
     });
   }
 
-  function checkExternalClassName($, filePath, authorizedBlockName) {
+  function checkExternalClassName() {
     eachClassName($, (className, wrapper) => {
-      if (bem.isAnotherBlockName(className, blockList, authorizedBlockName)) {
-        const blockName = bem.getBlockNameFromClass(className);
-        result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, blockName, wrapper);
+      if (bem.isAnotherBlockName(className, blockList, blockName)) {
+        const externalBlockName = bem.getBlockNameFromClass(className);
+        result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, externalBlockName, wrapper);
       }
     });
   }
 
-  function checkBemSyntaxClassName($, filePath, blockName) {
+  function checkBemSyntaxClassName() {
     eachClassName($, (className, wrapper) => {
-      if (options.checkLowerCase && className !== className.toLowerCase()) {
+      if (fileOptions.checkLowerCase && className !== className.toLowerCase()) {
         result.addError(`".${className}" should be in lower case.`, filePath, blockName, wrapper);
       }
       if (/___/.test(className)) {
@@ -122,8 +98,8 @@ module.exports = (sources, userOptions = {}) => {
       }
     });
   }
-  
-  function checkSelector($, filePath, blockName) {
+
+  function checkSelector() {
     eachWrapper($('operator'), wrapper => {
       if (wrapper.node.value !== '&') {
         return true;
@@ -139,4 +115,35 @@ module.exports = (sources, userOptions = {}) => {
       }
     });
   }
+}
+
+function getBlockList(filePathList, getFileOptions) {
+  return _.filter(filePathList.map(filePath => {
+    const fileOptions = getFileOptions(filePath);
+    const bem = createBem(fileOptions);
+    const blockName = bem.getBlockNameFromFile(filePath);
+    
+    return getIsIsolatedBlock(fileOptions, blockName) ? blockName : false;
+  }));
+}
+
+// Exports
+module.exports = (sources, userOptions = {}) => {
+  const result = createResult();
+  const getFileOptions = createOptions(userOptions);
+  const filePathList = globby.sync(sources);
+  const blockList = getBlockList(filePathList, getFileOptions);
+  
+  return Promise.all(filePathList.map(filePath => {
+    return fs.readFile(filePath, {encoding:'utf8'})
+      .then(data => bemLintFileData(filePath, data, result, blockList, getFileOptions))
+      .catch(error => {
+        const fileOptions = getFileOptions(filePath);
+        const bem = createBem(fileOptions);
+        const blockName = bem.getBlockNameFromFile(filePath);
+        result.addError(`${error.message}`, filePath, blockName);
+      });
+    }))
+    .then(() => result)
+    .catch(console.error);
 };
