@@ -21,28 +21,25 @@ module.exports = function (options) {
 
   function getBlockNameFromClass(className) {
     const blockName = className.split('__')[0].split('--')[0];
-    const currentClassPrefix = _.find(options.classPrefix, classPrefix => _.startsWith(className, classPrefix));
-    if (!currentClassPrefix) {
-      return blockName;
+    if (_.startsWith(className, options.classPrefix)) {
+      return blockName.slice(options.classPrefix.length);
     }
-    return blockName.slice(currentClassPrefix.length);
+    return blockName;
   }
 
-  function isBlockName(className, blockName, withPrefixList = options.classPrefix) {
-    return _.some(withPrefixList, classPrefix => {
-      const prefixedBlockName = `${classPrefix}${blockName}`;
-      return (
-        className === prefixedBlockName ||
-        _.startsWith(className, `${prefixedBlockName}--`) ||
-        _.startsWith(className, `${prefixedBlockName}__`)
-      );
-    });
+  function isBlockName(className, blockName, classPrefix = options.classPrefix) {
+    const prefixedBlockName = `${classPrefix}${blockName}`;
+    return (
+      className === prefixedBlockName ||
+      _.startsWith(className, `${prefixedBlockName}--`) ||
+      _.startsWith(className, `${prefixedBlockName}__`)
+    );
   }
 
   function isClassPrefixMissing(className, blockName) {
     return (
-      options.classPrefix.indexOf('') === -1 &&
-      isBlockName(className, blockName, [''])
+      options.classPrefix !== '' &&
+      isBlockName(className, blockName, '')
     );
   }
 
@@ -50,7 +47,8 @@ module.exports = function (options) {
     return _.some(blockList, blockName => {
       return (
         blockName !== actualBlockName &&
-        isBlockName(className, blockName, options.classPrefix)
+        // TODO: Find the project according to the block prefix 
+        isBlockName(className, blockName)
       );
     });
   }

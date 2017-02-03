@@ -5,13 +5,12 @@ const globby = require('globby');
 const defaultProjectOptions = {
   excludeBlock: [],
   checkLowerCase: true,
-  classPrefix: [''],
+  classPrefix: '',
   filePattern: '([^.]*)\.s?css'
 };
 
 function createOptions(userOptions, isRoot = true) {
   const options = _.merge({}, defaultProjectOptions, userOptions);
-  options.classPrefix = _.reverse(_.sortBy(options.classPrefix));
   if (isRoot) {
     options.project = (options.project || []).map(projectOptions => {
       if (!projectOptions.name) {

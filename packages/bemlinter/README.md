@@ -101,11 +101,11 @@ default: `true`
  
 To set the authorized class prefix
 
-default: `['']`
+default: `''`
 
 ```json
 {
-  "classPrefix": ["c-"]
+  "classPrefix": "c-"
 }
 ```
 

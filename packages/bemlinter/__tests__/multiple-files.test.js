@@ -15,11 +15,11 @@ const snap = (fileName, done, options = {}) => {
 };
 
 describe('Bemlinter of crossed styled files', () => {
-  it('should log error on both blocks', done => snap('cross-styling/*.scss', done, {classPrefix: ['c-']}));
+  it('should log error on both blocks', done => snap('cross-styling/*.scss', done, {classPrefix: 'c-'}));
   
   it('should not log error on the external block', done => snap('cross-styling/*.scss', done, {
     excludeBlock: ['external'],
-    classPrefix: ['c-']
+    classPrefix: 'c-'
   }));
 });
 
@@ -38,7 +38,7 @@ describe('Bemlinter of mixed settings files', () => {
     project: [{
       name: 'project',
       sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],
-      classPrefix: ['c-'],
+      classPrefix: 'c-',
       filePattern: 'project-([^.]*)\.scss'
     }]
   }));
