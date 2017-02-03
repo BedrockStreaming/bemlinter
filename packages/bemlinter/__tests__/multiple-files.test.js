@@ -23,10 +23,8 @@ describe('Bemlinter of crossed styled files', () => {
   }));
 });
 
-describe('Bemlinter of mixed settings files', () => {
-  it('should lint a block on error', done => snap('mixed-settings/*.scss', done));
-
-  it('should detect the project', done => snap('mixed-settings/*.scss', done, {
+describe('Bemlinter of multi project files', () => {
+  it('should detect the project and the missing prefix', done => snap('mixed-settings/*.scss', done, {
     project: [{
       name: 'project',
       sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],
@@ -34,7 +32,7 @@ describe('Bemlinter of mixed settings files', () => {
     }]
   }));
 
-  it('should lint without the prefix error', done => snap('mixed-settings/*.scss', done, {
+  it('should detect the project and the associate leak styles', done => snap('mixed-settings/*.scss', done, {
     project: [{
       name: 'project',
       sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],

@@ -19,10 +19,10 @@ module.exports = function (options) {
     return paramCase(match[1]);
   }
 
-  function getBlockNameFromClass(className) {
+  function getBlockNameFromClass(className, classPrefix = options.classPrefix) {
     const blockName = className.split('__')[0].split('--')[0];
-    if (_.startsWith(className, options.classPrefix)) {
-      return blockName.slice(options.classPrefix.length);
+    if (_.startsWith(className, classPrefix)) {
+      return blockName.slice(classPrefix.length);
     }
     return blockName;
   }
@@ -43,21 +43,10 @@ module.exports = function (options) {
     );
   }
 
-  function isAnotherBlockName(className, blockList, actualBlockName) {
-    return _.some(blockList, blockName => {
-      return (
-        blockName !== actualBlockName &&
-        // TODO: Find the project according to the block prefix 
-        isBlockName(className, blockName)
-      );
-    });
-  }
-
   return {
     getBlockNameFromFile,
     getBlockNameFromClass,
     isBlockName,
-    isClassPrefixMissing,
-    isAnotherBlockName
+    isClassPrefixMissing
   };
 };
