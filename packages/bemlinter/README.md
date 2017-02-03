@@ -123,6 +123,26 @@ default: `'([^.]*)\.s?css'`
 }
 ```
 
+### project (option)
+
+Allow to override global option for a portion of your sources
+
+default: `[]`
+
+```json
+{
+  "project": {
+    "name": 'my-project',
+    "sources": [
+      "a/path/to/your/project/folder/*.scss",
+      "a/path/to/a/project/file.scss
+    ]
+    "classPrefix": "mp-",
+    "filePattern": "my-project-([^.]*)\.scss"
+  }
+}
+```
+
 
 How to Contribute
 --------
