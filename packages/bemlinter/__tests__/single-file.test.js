@@ -51,3 +51,7 @@ describe('Bemlinter of syntax.scss', () => {
 describe('Bemlinter of class-concat.scss', () => {
   it('should detect class concatenation', done => snap(`class-concat.scss`, done));
 });
+
+describe('Bemlinter of unreadable.scss', () => {
+  it('should log a block as unreadable', done => snap(`unreadable.scss`, done));
+});

@@ -14,8 +14,10 @@ exports[`gulp-bemlinter should lint 1`] = `
 [syntax.scss:40] Error: \".syntax--big__close\" represents an element of a modifier, it should be cut in 2 classes.
 [syntax.scss:49] Error: \".syntax__header__logo\" should have a single depth of element.
 [syntax.scss:53] Error: \".syntax___footer\" element should have only 2 underscores.
+  ✗ unreadable
+[unreadable.scss] Error: Can\'t handle character: \"Û\" (1:0)
   ✓ warning
 [warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
 
-FAIL: bemlinter has detected 11 errors on 4 blocks."
+FAIL: bemlinter has detected 12 errors on 5 blocks."
 `;
