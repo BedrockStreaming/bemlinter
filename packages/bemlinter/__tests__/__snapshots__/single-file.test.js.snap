@@ -56,6 +56,13 @@ exports[`Bemlinter of syntax.scss should lint without a lower case error 1`] = `
 FAIL: bemlinter has detected 5 errors on 1 block."
 `;
 
+exports[`Bemlinter of unreadable.scss should log a block as unreadable 1`] = `
+"  ✗ unreadable
+[unreadable.scss] Error: Can\'t handle character: \"Û\" (1:0)
+
+FAIL: bemlinter has detected 1 error on 1 block."
+`;
+
 exports[`Bemlinter of warning.scss should warn the use of an external block 1`] = `
 "  ✓ warning
 [warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
