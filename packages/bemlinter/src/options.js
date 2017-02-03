@@ -13,8 +13,7 @@ function createOptions(userOptions, isRoot = true) {
   const options = _.merge({}, defaultProjectOptions, userOptions);
   options.classPrefix = _.reverse(_.sortBy(options.classPrefix));
   if (isRoot) {
-    options.project = options.project || [];
-    options.project = options.project.map(projectOptions => {
+    options.project = (options.project || []).map(projectOptions => {
       if (!projectOptions.name) {
         console.error('Your project should have a name');
       }
@@ -23,6 +22,7 @@ function createOptions(userOptions, isRoot = true) {
       }
       return _.merge({}, _.omit(options, 'project'), createOptions(projectOptions, false));
     });
+    options.name = '__root';
   }
   
   return options;

@@ -19,5 +19,5 @@ exports[`gulp-bemlinter should lint 1`] = `
   ✓ warning
 [warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
 
-FAIL: bemlinter has detected 12 errors on 5 blocks."
+FAIL: bemlinter has detected 12 errors on 7 blocks."
 `;
