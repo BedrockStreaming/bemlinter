@@ -34,8 +34,8 @@ function getIsIsolatedBlock(fileOptions, blockName) {
   return fileOptions.excludeBlock.indexOf(blockName) === -1;
 }
 
-function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
-  const fileOptions = getFileOptions(filePath);
+function bemLintFileData(filePath, data, result, blockList, options) {
+  const fileOptions = options.getFileOptions(filePath);
   const bem = createBem(fileOptions);
   const projectName = fileOptions.name;
   const blockName = bem.getBlockNameFromFile(filePath);
@@ -70,9 +70,15 @@ function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
 
   function checkExternalClassName() {
     eachClassName($, (className, wrapper) => {
-      if (bem.isAnotherBlockName(className, blockList, blockName)) {
-        const externalBlockName = bem.getBlockNameFromClass(className);
-        result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, projectName, externalBlockName, wrapper);
+      if (!bem.isBlockName(className, blockName)) {
+        const classPrefixList = options.getClassPrefixList();
+        const classPrefix = classPrefixList.find(prefix => _.startsWith(className, prefix));
+        const projectName = options.getProjectNameByClassPrefix(classPrefix);
+        const externalBlockName = bem.getBlockNameFromClass(className, classPrefix);
+        
+        if (projectName && blockList.indexOf(externalBlockName) !== -1) {
+          result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, projectName, externalBlockName, wrapper); 
+        }
       }
     });
   }
@@ -131,15 +137,15 @@ function getBlockList(filePathList, getFileOptions) {
 // Exports
 module.exports = (sources, userOptions = {}) => {
   const result = createResult();
-  const getFileOptions = createOptions(userOptions);
+  const options = createOptions(userOptions);
   const filePathList = globby.sync(sources);
-  const blockList = getBlockList(filePathList, getFileOptions);
+  const blockList = getBlockList(filePathList, options.getFileOptions);
   
   return Promise.all(filePathList.map(filePath => {
     return fs.readFile(filePath, {encoding:'utf8'})
-      .then(data => bemLintFileData(filePath, data, result, blockList, getFileOptions))
+      .then(data => bemLintFileData(filePath, data, result, blockList, options))
       .catch(error => {
-        const fileOptions = getFileOptions(filePath);
+        const fileOptions = options.getFileOptions(filePath);
         const bem = createBem(fileOptions);
         const blockName = bem.getBlockNameFromFile(filePath);
         result.addError(`${error.message}`, filePath, fileOptions.name, blockName);

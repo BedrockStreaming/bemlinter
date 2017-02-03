@@ -30,7 +30,7 @@ function createOptions(userOptions, isRoot = true) {
 module.exports = userOptions => {
   const options = createOptions(userOptions);
   
-  return filePath => {
+  function getFileOptions(filePath) {
     const fileOptions = _.find(options.project, projectOptions => {
       const globbyResult = globby.sync([filePath, ...projectOptions.sources.map(projectPath => `!${projectPath}`)]);
       return !globbyResult.length;
@@ -38,4 +38,23 @@ module.exports = userOptions => {
     
     return fileOptions || options;
   }
+  
+  function getClassPrefixList() {
+    const classPrefixList = _.uniq([options.classPrefix].concat(_.map(options.project, 'classPrefix')));
+    return _.reverse(_.sortBy(classPrefixList, 'length'));
+  }
+
+  function getProjectNameByClassPrefix(classPrefix) {
+    if (options.classPrefix === classPrefix) {
+      return options.name;
+    }
+    
+    const project = options.project.find(projectOptions => projectOptions.classPrefix === classPrefix);
+    if (!project) {
+      return false
+    }
+    return project.name;
+  }
+  
+  return {getFileOptions, getClassPrefixList, getProjectNameByClassPrefix}
 };
