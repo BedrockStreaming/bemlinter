@@ -37,10 +37,11 @@ function getIsIsolatedBlock(fileOptions, blockName) {
 function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
   const fileOptions = getFileOptions(filePath);
   const bem = createBem(fileOptions);
+  const projectName = fileOptions.name;
   const blockName = bem.getBlockNameFromFile(filePath);
   const isIsolatedBlock = getIsIsolatedBlock(fileOptions, blockName);
   if (isIsolatedBlock) {
-    result.addBlock(blockName);
+    result.addBlock(projectName, blockName);
   }
   const ast = parse(data);
   const $ = createQueryAst(ast);
@@ -57,11 +58,11 @@ function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
     eachClassName($, (className, wrapper) => {
       if (!bem.isBlockName(className, blockName)) {
         if (bem.isClassPrefixMissing(className, blockName)) {
-          result.addError(`".${className}" should have a block prefix.`, filePath, blockName, wrapper);
+          result.addError(`".${className}" should have a block prefix.`, filePath, projectName, blockName, wrapper);
         } else if (isClassFollowedByAPseudoClass($(wrapper))) {
-          result.addWarning(`".${className}" is only tolerated in this stylesheet.`, filePath, blockName, wrapper);
+          result.addWarning(`".${className}" is only tolerated in this stylesheet.`, filePath, projectName, blockName, wrapper);
         } else {
-          result.addError(`".${className}" is incoherent with the file name.`, filePath, blockName, wrapper);
+          result.addError(`".${className}" is incoherent with the file name.`, filePath, projectName, blockName, wrapper);
         }
       }
     });
@@ -71,7 +72,7 @@ function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
     eachClassName($, (className, wrapper) => {
       if (bem.isAnotherBlockName(className, blockList, blockName)) {
         const externalBlockName = bem.getBlockNameFromClass(className);
-        result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, externalBlockName, wrapper);
+        result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, projectName, externalBlockName, wrapper);
       }
     });
   }
@@ -79,22 +80,22 @@ function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
   function checkBemSyntaxClassName() {
     eachClassName($, (className, wrapper) => {
       if (fileOptions.checkLowerCase && className !== className.toLowerCase()) {
-        result.addError(`".${className}" should be in lower case.`, filePath, blockName, wrapper);
+        result.addError(`".${className}" should be in lower case.`, filePath, projectName, blockName, wrapper);
       }
       if (/___/.test(className)) {
-        result.addError(`".${className}" element should have only 2 underscores.`, filePath, blockName, wrapper);
+        result.addError(`".${className}" element should have only 2 underscores.`, filePath, projectName, blockName, wrapper);
       }
       if (/---/.test(className)) {
-        result.addError(`".${className}" modifier should have only 2 dashes.`, filePath, blockName, wrapper);
+        result.addError(`".${className}" modifier should have only 2 dashes.`, filePath, projectName, blockName, wrapper);
       }
       if (/--[^-]+--/.test(className)) {
-        result.addError(`".${className}" should have a single modifier.`, filePath, blockName, wrapper);
+        result.addError(`".${className}" should have a single modifier.`, filePath, projectName, blockName, wrapper);
       }
       if (/__[^-]+__/.test(className)) {
-        result.addError(`".${className}" should have a single depth of element.`, filePath, blockName, wrapper);
+        result.addError(`".${className}" should have a single depth of element.`, filePath, projectName, blockName, wrapper);
       }
       if (/--[^-]+__/.test(className)) {
-        result.addError(`".${className}" represents an element of a modifier, it should be cut in 2 classes.`, filePath, blockName, wrapper);
+        result.addError(`".${className}" represents an element of a modifier, it should be cut in 2 classes.`, filePath, projectName, blockName, wrapper);
       }
     });
   }
@@ -111,7 +112,7 @@ function bemLintFileData(filePath, data, result, blockList, getFileOptions) {
       const nextNodeType = next.get(0).type;
       if (['space', 'punctuation', 'class', 'id'].indexOf(nextNodeType) === -1) {
         const selector = nodeToString(next.parent().get(0)).trim();
-        result.addError(`"${selector}" should not concatenate classes.`, filePath, blockName, wrapper);
+        result.addError(`"${selector}" should not concatenate classes.`, filePath, projectName, blockName, wrapper);
       }
     });
   }
@@ -141,7 +142,7 @@ module.exports = (sources, userOptions = {}) => {
         const fileOptions = getFileOptions(filePath);
         const bem = createBem(fileOptions);
         const blockName = bem.getBlockNameFromFile(filePath);
-        result.addError(`${error.message}`, filePath, blockName);
+        result.addError(`${error.message}`, filePath, fileOptions.name, blockName);
       });
     }))
     .then(() => result)

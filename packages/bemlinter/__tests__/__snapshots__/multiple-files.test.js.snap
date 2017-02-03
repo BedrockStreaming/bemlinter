@@ -15,17 +15,17 @@ FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of mixed settings files should detect the project 1`] = `
-"  ✗ prefixed
+"  ✗ project / prefixed
 [project-prefixed.scss:1] Error: \".c-prefixed\" is incoherent with the file name.
 
-FAIL: bemlinter has detected 1 error on 1 block."
+FAIL: bemlinter has detected 1 error on 2 blocks."
 `;
 
 exports[`Bemlinter of mixed settings files should lint a block on error 1`] = `
 "  ✗ project-prefixed
 [project-prefixed.scss:1] Error: \".c-prefixed\" is incoherent with the file name.
 
-FAIL: bemlinter has detected 1 error on 1 block."
+FAIL: bemlinter has detected 1 error on 2 blocks."
 `;
 
 exports[`Bemlinter of mixed settings files should lint without the prefix error 1`] = `"OK: bemlinter has validated 2 blocks."`;
