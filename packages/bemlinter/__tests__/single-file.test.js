@@ -29,9 +29,7 @@ describe('Bemlinter of warning.scss', () => {
 });
 
 describe('Bemlinter of prefix.scss', () => {
-  it('should lint with a missing prefix error', done => snap(`prefix.scss`, done, {classPrefix: ['c-']}));
-  
-  it('should lint without error', done => snap(`prefix.scss`, done, {classPrefix: ['', 'c-']}));
+  it('should lint with a missing prefix error', done => snap(`prefix.scss`, done, {classPrefix: 'c-'}));
 });
 
 describe('Bemlinter of leak.scss', () => {

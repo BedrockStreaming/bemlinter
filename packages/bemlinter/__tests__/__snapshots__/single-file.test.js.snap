@@ -4,68 +4,66 @@ exports[`Bemlinter of alright.scss should lint without error 1`] = `"OK: bemlint
 
 exports[`Bemlinter of class-concat.scss should detect class concatenation 1`] = `
 "  ✗ class-concat
-[class-concat.scss:23] Error: "&__close" should not concatenate classes.
-[class-concat.scss:31] Error: "&--big" should not concatenate classes.
+[class-concat.scss:23] Error: \"&__close\" should not concatenate classes.
+[class-concat.scss:31] Error: \"&--big\" should not concatenate classes.
 
 FAIL: bemlinter has detected 2 errors on 1 block."
 `;
 
 exports[`Bemlinter of leak.css should lint with a leak error 1`] = `
 "  ✗ leak
-[leak.css:11] Error: ".external-block" is incoherent with the file name.
+[leak.css:11] Error: \".external-block\" is incoherent with the file name.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of leak.scss should lint with a leak error 1`] = `
 "  ✗ leak
-[leak.scss:10] Error: ".external-block" is incoherent with the file name.
+[leak.scss:10] Error: \".external-block\" is incoherent with the file name.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of prefix.scss should lint with a missing prefix error 1`] = `
 "  ✗ prefix
-[prefix.scss:21] Error: ".prefix--big" should have a block prefix.
+[prefix.scss:21] Error: \".prefix--big\" should have a block prefix.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
-exports[`Bemlinter of prefix.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
-
 exports[`Bemlinter of syntax.scss should lint with 6 different syntax error 1`] = `
 "  ✗ syntax
-[syntax.scss:21] Error: ".syntax---big" modifier should have only 2 dashes.
-[syntax.scss:26] Error: ".syntax--big--light" should have a single modifier.
-[syntax.scss:32] Error: ".syntax__Close" should be in lower case.
-[syntax.scss:40] Error: ".syntax--big__close" represents an element of a modifier, it should be cut in 2 classes.
-[syntax.scss:49] Error: ".syntax__header__logo" should have a single depth of element.
-[syntax.scss:53] Error: ".syntax___footer" element should have only 2 underscores.
+[syntax.scss:21] Error: \".syntax---big\" modifier should have only 2 dashes.
+[syntax.scss:26] Error: \".syntax--big--light\" should have a single modifier.
+[syntax.scss:32] Error: \".syntax__Close\" should be in lower case.
+[syntax.scss:40] Error: \".syntax--big__close\" represents an element of a modifier, it should be cut in 2 classes.
+[syntax.scss:49] Error: \".syntax__header__logo\" should have a single depth of element.
+[syntax.scss:53] Error: \".syntax___footer\" element should have only 2 underscores.
 
 FAIL: bemlinter has detected 6 errors on 1 block."
 `;
 
 exports[`Bemlinter of syntax.scss should lint without a lower case error 1`] = `
 "  ✗ syntax
-[syntax.scss:21] Error: ".syntax---big" modifier should have only 2 dashes.
-[syntax.scss:26] Error: ".syntax--big--light" should have a single modifier.
-[syntax.scss:40] Error: ".syntax--big__close" represents an element of a modifier, it should be cut in 2 classes.
-[syntax.scss:49] Error: ".syntax__header__logo" should have a single depth of element.
-[syntax.scss:53] Error: ".syntax___footer" element should have only 2 underscores.
+[syntax.scss:21] Error: \".syntax---big\" modifier should have only 2 dashes.
+[syntax.scss:26] Error: \".syntax--big--light\" should have a single modifier.
+[syntax.scss:40] Error: \".syntax--big__close\" represents an element of a modifier, it should be cut in 2 classes.
+[syntax.scss:49] Error: \".syntax__header__logo\" should have a single depth of element.
+[syntax.scss:53] Error: \".syntax___footer\" element should have only 2 underscores.
 
 FAIL: bemlinter has detected 5 errors on 1 block."
 `;
 
 exports[`Bemlinter of unreadable.scss should log a block as unreadable 1`] = `
 "  ✗ unreadable
-[unreadable.scss] Error: Can't handle character: "Û" (1:0)
+[unreadable.scss] Error: Can\'t handle character: \"Û\" (1:0)
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of warning.scss should warn the use of an external block 1`] = `
 "  ✓ warning
-[warning.scss:21] Warning: ".external-block" is only tolerated in this stylesheet.
+[warning.scss:21] Warning: \".external-block\" is only tolerated in this stylesheet.
 
 OK: bemlinter has validated 1 block."
 `;
