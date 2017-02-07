@@ -10,7 +10,7 @@ describe('gulp-bemlinter', () => {
     
     gulp.src([
         '../bemlinter/__tests__/sources/*.scss',
-        '!../bemlinter/__tests__/sources/ProjectAlright.scss'
+        '!../bemlinter/__tests__/sources/ModuleAlright.scss'
       ])
       .pipe(bemlinter())
       .pipe(bemlinter.format(false, spy));

@@ -19,20 +19,20 @@ function getContextualMessage(message, filePath, line) {
 
 module.exports = function (lintResult, withColor = true) {
   const format = [];
-  const projectList = lintResult.getProjectList();
+  const moduleList = lintResult.getModuleList();
   const blockCount = lintResult.getBlockList().length;
   const errorCount = lintResult.getErrorList().length;
   let hasDetails = false;
   
-  projectList.forEach(projectName => {
-    const blockList = lintResult.getBlockList(projectName);
+  moduleList.forEach(moduleName => {
+    const blockList = lintResult.getBlockList(moduleName);
 
     blockList.forEach(blockName => {
-      const errorList = lintResult.getErrorList(projectName, blockName);
-      const warningList = lintResult.getWarningList(projectName, blockName);
+      const errorList = lintResult.getErrorList(moduleName, blockName);
+      const warningList = lintResult.getWarningList(moduleName, blockName);
 
       if (errorList.length || warningList.length) {
-        formatStatus(projectName, blockName, !errorList.length);
+        formatStatus(moduleName, blockName, !errorList.length);
         hasDetails = true;
       }
       if (errorList.length) {
@@ -63,8 +63,8 @@ module.exports = function (lintResult, withColor = true) {
     format.push(getContextualMessage(`Error: ${message}`, filePath, line));
   }
 
-  function formatStatus(projectName, blockName, blockStatus) {
-    let line = `  ${blockStatus ? '✓' : '✗'} ${projectName !== '__root' ? `${projectName} / ` : ''}${blockName}`;
+  function formatStatus(moduleName, blockName, blockStatus) {
+    let line = `  ${blockStatus ? '✓' : '✗'} ${moduleName !== '__root' ? `${moduleName} / ` : ''}${blockName}`;
     if (withColor) {
       line = colors[blockStatus ? 'green' : 'red'](line);
     }

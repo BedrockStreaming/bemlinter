@@ -18,9 +18,9 @@ describe('Bemlinter of alright.scss', () => {
   it('should lint without error', done => snap(`alright.scss`, done));
 });
 
-describe('Bemlinter of ProjectAlright.scss', () => {
-  it('should lint without error', done => snap(`ProjectAlright.scss`, done, {
-    filePattern: '(?:Project)?([^.]*)\.scss'
+describe('Bemlinter of ModuleAlright.scss', () => {
+  it('should lint without error', done => snap(`ModuleAlright.scss`, done, {
+    filePattern: '(?:Module)?([^.]*)\.scss'
   }));
 });
 

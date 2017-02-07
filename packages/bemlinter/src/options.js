@@ -2,7 +2,7 @@ const _ = require('lodash');
 const globby = require('globby');
 
 // Settings
-const defaultProjectOptions = {
+const defaultModuleOptions = {
   excludeBlock: [],
   checkLowerCase: true,
   classPrefix: '',
@@ -10,16 +10,19 @@ const defaultProjectOptions = {
 };
 
 function createOptions(userOptions, isRoot = true) {
-  const options = _.merge({}, defaultProjectOptions, userOptions);
+  const options = _.merge({}, defaultModuleOptions, userOptions);
   if (isRoot) {
-    options.project = (options.project || []).map(projectOptions => {
-      if (!projectOptions.name) {
-        console.error('Your project should have a name');
+    options.modules = (options.modules || []).map(moduleOptions => {
+      if (!moduleOptions.name) {
+        console.error('Your module should have a name');
       }
-      if (typeof projectOptions.sources === 'string') {
-        projectOptions.sources = [projectOptions.sources];
+      if (!moduleOptions.sources) {
+        console.error(`Your module "${moduleOptions.name}" should have sources`);
       }
-      return _.merge({}, _.omit(options, 'project'), createOptions(projectOptions, false));
+      if (typeof moduleOptions.sources === 'string') {
+        moduleOptions.sources = [moduleOptions.sources];
+      }
+      return _.merge({}, _.omit(options, 'modules'), createOptions(moduleOptions, false));
     });
     options.name = '__root';
   }
@@ -31,8 +34,8 @@ module.exports = userOptions => {
   const options = createOptions(userOptions);
   
   function getFileOptions(filePath) {
-    const fileOptions = _.find(options.project, projectOptions => {
-      const globbyResult = globby.sync([filePath, ...projectOptions.sources.map(projectPath => `!${projectPath}`)]);
+    const fileOptions = _.find(options.modules, moduleOptions => {
+      const globbyResult = globby.sync([filePath, ...moduleOptions.sources.map(modulePath => `!${modulePath}`)]);
       return !globbyResult.length;
     });
     
@@ -40,21 +43,21 @@ module.exports = userOptions => {
   }
   
   function getClassPrefixList() {
-    const classPrefixList = _.uniq([options.classPrefix].concat(_.map(options.project, 'classPrefix')));
+    const classPrefixList = _.uniq([options.classPrefix].concat(_.map(options.modules, 'classPrefix')));
     return _.reverse(_.sortBy(classPrefixList, 'length'));
   }
 
-  function getProjectNameByClassPrefix(classPrefix) {
+  function getModuleNameByClassPrefix(classPrefix) {
     if (options.classPrefix === classPrefix) {
       return options.name;
     }
     
-    const project = options.project.find(projectOptions => projectOptions.classPrefix === classPrefix);
-    if (!project) {
+    const module = options.modules.find(moduleOptions => moduleOptions.classPrefix === classPrefix);
+    if (!module) {
       return false
     }
-    return project.name;
+    return module.name;
   }
   
-  return {getFileOptions, getClassPrefixList, getProjectNameByClassPrefix}
+  return {getFileOptions, getClassPrefixList, getModuleNameByClassPrefix}
 };

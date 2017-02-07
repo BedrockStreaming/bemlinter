@@ -23,21 +23,21 @@ describe('Bemlinter of crossed styled files', () => {
   }));
 });
 
-describe('Bemlinter of multi project files', () => {
-  it('should detect the project and the missing prefix', done => snap('mixed-settings/*.scss', done, {
-    project: [{
-      name: 'project',
-      sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],
-      filePattern: 'project-([^.]*)\.scss'
+describe('Bemlinter of multi-modules files', () => {
+  it('should detect the module and the missing prefix', done => snap('mixed-settings/*.scss', done, {
+    modules: [{
+      name: 'module',
+      sources: [`${__dirname}/sources/mixed-settings/module-prefixed.scss`],
+      filePattern: 'module-([^.]*)\.scss'
     }]
   }));
 
-  it('should detect the project and the associate leak styles', done => snap('mixed-settings/*.scss', done, {
-    project: [{
-      name: 'project',
-      sources: [`${__dirname}/sources/mixed-settings/project-prefixed.scss`],
+  it('should detect the module and the associate leak styles', done => snap('mixed-settings/*.scss', done, {
+    modules: [{
+      name: 'module',
+      sources: [`${__dirname}/sources/mixed-settings/module-prefixed.scss`],
       classPrefix: 'c-',
-      filePattern: 'project-([^.]*)\.scss'
+      filePattern: 'module-([^.]*)\.scss'
     }]
   }));
 });

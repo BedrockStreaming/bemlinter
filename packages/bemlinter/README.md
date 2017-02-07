@@ -119,27 +119,31 @@ default: `'([^.]*)\.s?css'`
 
 ```json
 {
-  "filePattern": "(?:project-)?([^.]*)\.scss"
+  "filePattern": "(?:module-)?([^.]*)\.scss"
 }
 ```
 
-### project (option)
+### modules (option)
 
-Allow to override global option for a portion of your sources
+Allow to override global option for portions of your sources
+
+:warning: A module should have, at least `name` and `sources` properties
 
 default: `[]`
 
 ```json
 {
-  "project": {
-    "name": 'my-project',
-    "sources": [
-      "a/path/to/your/project/folder/*.scss",
-      "a/path/to/a/project/file.scss
-    ]
-    "classPrefix": "mp-",
-    "filePattern": "my-project-([^.]*)\.scss"
-  }
+  "modules": [
+    {
+      "name": 'my-module',
+      "sources": [
+        "a/path/to/your/module/folder/*.scss",
+        "a/path/to/a/module/file.scss
+      ]
+      "classPrefix": "mm-",
+      "filePattern": "my-module-([^.]*)\.scss"
+    }
+  ]
 }
 ```
 

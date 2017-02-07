@@ -1,4 +1,4 @@
-exports[`Bemlinter of ProjectAlright.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
+exports[`Bemlinter of ModuleAlright.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
 
 exports[`Bemlinter of alright.scss should lint without error 1`] = `"OK: bemlinter has validated 1 block."`;
 
