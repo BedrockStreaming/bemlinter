@@ -24,6 +24,13 @@ exports[`Bemlinter of leak.scss should lint with a leak error 1`] = `
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
+exports[`Bemlinter of mixins-content.scss should lint with a leak error 1`] = `
+"  ✗ mixins-content
+[mixins-content.scss:7] Error: \".icon\" is incoherent with the file name.
+
+FAIL: bemlinter has detected 1 error on 1 block."
+`;
+
 exports[`Bemlinter of prefix.scss should lint with a missing prefix error 1`] = `
 "  ✗ prefix
 [prefix.scss:21] Error: \".prefix--big\" should have a block prefix.

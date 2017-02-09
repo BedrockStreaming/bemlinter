@@ -1,0 +1,12 @@
+.mixins-content {
+  display: block;
+  position: absolute;
+  z-index: 10;
+
+  @include mq('big-screen') {
+    .icon {
+      width: 64px;
+      height: 64px;
+    }
+  }
+}
