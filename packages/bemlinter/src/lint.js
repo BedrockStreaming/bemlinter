@@ -173,6 +173,12 @@ module.exports = (sources, userOptions = {}) => {
         result.addError(`${error.message}`, filePath, fileOptions.name, blockName);
       });
     }))
-    .then(() => result)
+    .then(() => {
+      const snapshotFilePath = options.getOptions('snapshot');
+      if (snapshotFilePath !== false) {
+        result.addSnapshot(snapshotFilePath);
+      }
+      return result;
+    })
     .catch(console.error);
 };

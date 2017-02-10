@@ -1,19 +1,15 @@
 const _ = require('lodash');
 const fs = require('fs');
 
+function getLogIdentifiers(log) {
+  return _.pick(log, ['moduleName', 'blockName', 'message']);
+}
+
 function getActualQuality(lintResult) {
-  const quality = {};
-
-  lintResult.getModuleList().forEach(moduleName => {
-    lintResult.getBlockList(moduleName).forEach(blockName => {
-      const error = lintResult.getErrorList(moduleName, blockName).length;
-      const warning = lintResult.getWarningList(moduleName, blockName).length;
-
-      quality[`${moduleName} / ${blockName}`] = {error, warning};
-    });
-  });
-
-  return quality;
+  return {
+    errorList: lintResult.getErrorList().map(getLogIdentifiers),
+    warningList: lintResult.getErrorList().map(getLogIdentifiers),
+  };
 }
 
 function getSnapshotQuality(filePath) {
@@ -29,49 +25,50 @@ function getSnapshotQuality(filePath) {
   }
 }
 
-function getDifferenceQuality(actualQuality, snapshotQuality) {
-  return _.transform(
-    _.merge({}, snapshotQuality, actualQuality),
-    (result, {error, warning}, moduleName) => {
-      const isNew = typeof snapshotQuality[moduleName] === 'undefined';
-      const isDeleted = typeof actualQuality[moduleName] === 'undefined';
-      const reference = isNew ? actualQuality : snapshotQuality;
+function getSnapshotResult(lintResult, snapshotQuality) {
+  const completeLogList = (logList, logType) => {
+    const isSnapshotExists = snapshotQuality !== false;
+    const isModuleExists = log => _.some(snapshotQuality[`${logType}List`], _.pick(log, ['moduleName', 'blockName']));
+    const isErrorExists = log => _.some(snapshotQuality[`${logType}List`], getLogIdentifiers(log));
+    const completeLog = log => {
+      log.isNew = isSnapshotExists && isModuleExists(log) && !isErrorExists(log);
 
-      result[moduleName] = {
-        isNew,
-        isDeleted,
-        error: error - reference[moduleName].error,
-        warning: warning - reference[moduleName].warning
-      };
-    },
-    {}
-  );
+      return log;
+    };
+
+    return logList.map(completeLog);
+  };
+
+  return {
+    errorList: completeLogList(lintResult.getErrorList(), 'error'),
+    warningList: completeLogList(lintResult.getErrorList(), 'warning'),
+  };
 }
 
-module.exports = function createSnapshot(lintResult, filePath = './.bemlinter.snap') {
-  const actualQuality = getActualQuality(lintResult);
+module.exports = function createSnapshot(lintResult, filePath) {
   const snapshotQuality = getSnapshotQuality(filePath);
-  const differenceQuality = getDifferenceQuality(actualQuality, snapshotQuality);
+  const snapshotResult = getSnapshotResult(lintResult, snapshotQuality);
 
-  if (!isSnapshotExists() || getStatus()) {
+  if (!isSnapshotExists() || (
+      getStatus() &&
+      snapshotResult.errorList.length < snapshotQuality.errorList.length
+    )) {
     updateSnapshot();
-  }
-
-  function getStatus() {
-    return !_.findKey(differenceQuality, ({error}) => error > 0);
   }
 
   function isSnapshotExists() {
     return snapshotQuality !== false;
   }
 
+  function getStatus() {
+    return !_.some(snapshotResult.errorList, {isNew: true});
+  }
+
   function updateSnapshot() {
+    console.log('snapshot updated!');
+    const actualQuality = getActualQuality(lintResult);
     fs.writeFileSync(filePath, JSON.stringify(actualQuality));
   }
 
-  function getDetails() {
-    return differenceQuality;
-  }
-
-  return {isSnapshotExists, updateSnapshot, getStatus, getDetails};
+  return {isSnapshotExists, updateSnapshot, getStatus, snapshotResult};
 };
