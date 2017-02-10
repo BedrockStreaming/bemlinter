@@ -39,6 +39,12 @@ new Promise(resolve => {
 })
 .then(lintResult => {
   console.log(format(lintResult));
+  if (argv.u) {
+    lintResult.getSnapshot().updateSnapshot();
+    console.log('');
+    console.log('OK: Snapshot updated');
+    process.exit(0);
+  }
   process.exit(lintResult.getStatus() ? 0 : 1);
 })
 .catch(console.error);
