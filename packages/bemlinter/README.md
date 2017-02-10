@@ -93,6 +93,8 @@ A boolean if you want to monitor the quality tendency instead of targeting absol
 
 :information_source: You also can set a file path of your snapshot. The default path to store your snapshot is `.bemlinter-snap`.
 
+:information_source: If you use bemlinter with in command line, you can force snapshot update with `-u`.
+
 default: `false`
 
 ```json
