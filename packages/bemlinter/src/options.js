@@ -12,6 +12,10 @@ const defaultModuleOptions = {
 
 function createOptions(userOptions, isRoot = true) {
   const options = _.merge({}, defaultModuleOptions, userOptions);
+  if (options.snapshot === true) {
+    options.snapshot = './.bemlinter.snap';
+  }
+
   if (isRoot) {
     options.modules = (options.modules || []).map(moduleOptions => {
       if (!moduleOptions.name) {
@@ -34,7 +38,11 @@ function createOptions(userOptions, isRoot = true) {
 module.exports = userOptions => {
   const options = createOptions(userOptions);
 
-  function getOptions() {
+  function getOptions(optionName) {
+    if (optionName) {
+      return options[optionName]
+    }
+
     return options;
   }
 

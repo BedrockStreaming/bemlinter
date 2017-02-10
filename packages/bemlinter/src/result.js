@@ -4,9 +4,10 @@ const createSnapshot = require('./snapshot');
 
 module.exports = function () {
   const blockList = [];
-  const errorList = [];
-  const warningList = [];
+  let errorList = [];
+  let warningList = [];
   const basePath = process.cwd();
+  let snapshot = false;
 
   // Utils
   function formatLog(moduleName, blockName, message, filePath, wrapper) {
@@ -30,6 +31,12 @@ module.exports = function () {
 
   function addWarning(message, filePath, moduleName, blockName, wrapper) {
     warningList.push(formatLog(moduleName, blockName, message, filePath, wrapper));
+  }
+
+  function addSnapshot(filePath) {
+    snapshot = createSnapshot(this, filePath);
+    errorList = snapshot.snapshotResult.errorList;
+    warningList = snapshot.snapshotResult.warningList;
   }
 
   // Getter
@@ -73,10 +80,10 @@ module.exports = function () {
   }
 
   function getSnapshot() {
-    return createSnapshot(this);
+    return snapshot;
   }
 
   return {
-    addBlock, addError, addWarning,
+    addBlock, addError, addWarning, addSnapshot,
     getModuleList, getBlockList, getErrorList, getWarningList, hasError, getStatus, getSnapshot};
 };
