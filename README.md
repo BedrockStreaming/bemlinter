@@ -13,7 +13,7 @@ To developers
 It's a monorepo managed with [lerna](https://lernajs.io/):
 
 ```sh
-npm install --global lerna@^2.0.0-beta
+npm install -g lerna@2.0.0-beta.35
 ```
 
 To launch tests:

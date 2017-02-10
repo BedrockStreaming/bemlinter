@@ -1,7 +1,7 @@
 bemlinter [![Build Status](https://travis-ci.org/M6Web/bemlinter.svg?branch=master)](https://travis-ci.org/M6Web/bemlinter)
 ======
 
-A cli tool to lint bem component isolation in CSS / SCSS files
+A cli tool to lint bem component isolation in CSS / SCSS files.
 
 The main rules are: 
 
@@ -30,7 +30,7 @@ You can set your `package.json` to use bemlinter:
 Configuration file 
 ------
 
-If you need more configuration you can use a configuration file:
+If you need more configuration you can use a json configuration file:
 
 ```json
 {
@@ -40,11 +40,10 @@ If you need more configuration you can use a configuration file:
 }
 ```
 
-The configuration file is a json file:
 
 ### sources
 
-To define the paths of your source files
+To define the paths of your source files.
 
 ```json
 {
@@ -55,9 +54,10 @@ To define the paths of your source files
 }
 ```
 
+
 ### excludePath (option)
 
-To define the paths of some exclude source files 
+To define the paths of some exclude source files.
 
 default: `[]`
 
@@ -68,6 +68,7 @@ default: `[]`
   ]
 }
 ```
+
 
 ### excludeBlock (option)
 
@@ -85,9 +86,25 @@ default: `[]`
 }
 ```
 
+
+### snapshot (option)
+
+A boolean if you want to monitor the quality tendency instead of targeting absolutely zero error.
+
+:information_source: You also can set a file path of your snapshot. The default path to store your snapshot is `.bemlinter-snap`.
+
+default: `false`
+
+```json
+{
+  "snapshot": true
+}
+```
+
+
 ### checkLowerCase (option)
  
-To disable lower case check
+To disable lower case check.
 
 default: `true`
 
@@ -97,9 +114,10 @@ default: `true`
 }
 ```
 
+
 ### classPrefix (option)
  
-To set the authorized class prefix
+To set the authorized class prefix.
 
 default: `''`
 
@@ -109,11 +127,12 @@ default: `''`
 }
 ```
 
+
 ### filePattern (option)
 
-Regexp used to retrieve the block name from the file name
+Regexp used to retrieve the block name from the file name.
 
-:warning: Your regexp should contain only one capturing group
+:warning: Your regexp should contain only one capturing group.
 
 default: `'([^.]*)\.s?css'`
 
@@ -123,11 +142,12 @@ default: `'([^.]*)\.s?css'`
 }
 ```
 
+
 ### modules (option)
 
-Allow to override global option for portions of your sources
+Allow to override global option for portions of your sources.
 
-:warning: A module should have, at least `name` and `sources` properties
+:warning: A module should have, at least `name` and `sources` properties.
 
 default: `[]`
 
@@ -162,5 +182,3 @@ Author & Community
 
 bemlinter is under [MIT License](http://tzi.mit-license.org/).<br>
 It was created & is maintained by [Thomas ZILLIOX](http://tzi.fr) for M6Web.
-
-

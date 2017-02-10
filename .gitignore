@@ -1,4 +1,5 @@
 .bemlintrc
+.bemlinter-snap
 npm-debug.log
 lerna-debug.log
 node_modules/

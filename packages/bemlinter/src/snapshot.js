@@ -1,18 +1,18 @@
 const _ = require('lodash');
 const fs = require('fs');
 
-function getLogIdentifiers(log) {
+function getSnapshotLog(log) {
   return _.pick(log, ['moduleName', 'blockName', 'message']);
 }
 
-function getActualQuality(lintResult) {
+function getSnapshotLogsFromResult(lintResult) {
   return {
-    errorList: lintResult.getErrorList().map(getLogIdentifiers),
-    warningList: lintResult.getErrorList().map(getLogIdentifiers),
+    errorList: lintResult.getErrorList().map(getSnapshotLog),
+    warningList: lintResult.getWarningList().map(getSnapshotLog),
   };
 }
 
-function getSnapshotQuality(filePath) {
+function getSnapshotLogsFromFile(filePath) {
   if (!fs.existsSync(filePath)) {
     return false;
   }
@@ -25,13 +25,12 @@ function getSnapshotQuality(filePath) {
   }
 }
 
-function getSnapshotResult(lintResult, snapshotQuality) {
+function addLogAntecedence(lintResult, antecedenceLogs) {
+  const isSnapshotExists = antecedenceLogs !== false;
   const completeLogList = (logList, logType) => {
-    const isSnapshotExists = snapshotQuality !== false;
-    const isModuleExists = log => _.some(snapshotQuality[`${logType}List`], _.pick(log, ['moduleName', 'blockName']));
-    const isErrorExists = log => _.some(snapshotQuality[`${logType}List`], getLogIdentifiers(log));
+    const hasAntecedence = log => _.some(antecedenceLogs[`${logType}List`], getSnapshotLog(log));
     const completeLog = log => {
-      log.isNew = isSnapshotExists && isModuleExists(log) && !isErrorExists(log);
+      log.isNew = isSnapshotExists && !hasAntecedence(log);
 
       return log;
     };
@@ -41,34 +40,61 @@ function getSnapshotResult(lintResult, snapshotQuality) {
 
   return {
     errorList: completeLogList(lintResult.getErrorList(), 'error'),
-    warningList: completeLogList(lintResult.getErrorList(), 'warning'),
+    warningList: completeLogList(lintResult.getWarningList(), 'warning'),
   };
 }
 
 module.exports = function createSnapshot(lintResult, filePath) {
-  const snapshotQuality = getSnapshotQuality(filePath);
-  const snapshotResult = getSnapshotResult(lintResult, snapshotQuality);
+  const snapshotLogs = getSnapshotLogsFromFile(filePath);
+  const lintResultWithAntecedence = addLogAntecedence(lintResult, snapshotLogs);
 
-  if (!isSnapshotExists() || (
-      getStatus() &&
-      snapshotResult.errorList.length < snapshotQuality.errorList.length
-    )) {
+  if (shouldUpdateSnapshot()) {
     updateSnapshot();
   }
 
   function isSnapshotExists() {
-    return snapshotQuality !== false;
+    return snapshotLogs !== false;
   }
 
-  function getStatus() {
-    return !_.some(snapshotResult.errorList, {isNew: true});
+  function shouldUpdateSnapshot() {
+    if (!isSnapshotExists()) {
+      return true;
+    }
+
+    return (getStatus() && lintResultWithAntecedence.errorList.length < snapshotLogs.errorList.length);
   }
 
   function updateSnapshot() {
-    console.log('snapshot updated!');
-    const actualQuality = getActualQuality(lintResult);
-    fs.writeFileSync(filePath, JSON.stringify(actualQuality));
+    const newSnapshotLogs = getSnapshotLogsFromResult(lintResult);
+    fs.writeFileSync(filePath, JSON.stringify(newSnapshotLogs, null, 2));
   }
 
-  return {isSnapshotExists, updateSnapshot, getStatus, snapshotResult};
+  function getFilterCriteria(moduleName, blockName) {
+    const criteria = {isNew: true};
+    if (moduleName) {
+      criteria.moduleName = moduleName;
+      if (blockName) {
+        criteria.blockName = blockName;
+      }
+    }
+
+    return criteria;
+  }
+
+  function getStatus(moduleName = false, blockName = false) {
+    return !_.some(lintResultWithAntecedence.errorList, getFilterCriteria(moduleName, blockName));
+  }
+
+  function getNewErrorList(moduleName = false, blockName = false) {
+    return _.filter(lintResultWithAntecedence.errorList, getFilterCriteria(moduleName, blockName));
+  }
+
+  function getNewWarningList(moduleName = false, blockName = false) {
+    return _.filter(lintResultWithAntecedence.warningList, getFilterCriteria(moduleName, blockName));
+  }
+
+  return {
+    isSnapshotExists, getNewErrorList, getNewWarningList, getStatus, updateSnapshot,
+    result: lintResultWithAntecedence
+  };
 };

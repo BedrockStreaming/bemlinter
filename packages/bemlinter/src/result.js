@@ -6,8 +6,8 @@ module.exports = function () {
   const blockList = [];
   let errorList = [];
   let warningList = [];
+  let snapshot = null;
   const basePath = process.cwd();
-  let snapshot = false;
 
   // Utils
   function formatLog(moduleName, blockName, message, filePath, wrapper) {
@@ -35,8 +35,8 @@ module.exports = function () {
 
   function addSnapshot(filePath) {
     snapshot = createSnapshot(this, filePath);
-    errorList = snapshot.snapshotResult.errorList;
-    warningList = snapshot.snapshotResult.warningList;
+    errorList = snapshot.result.errorList;
+    warningList = snapshot.result.warningList;
   }
 
   // Getter
@@ -76,7 +76,14 @@ module.exports = function () {
   }
 
   function getStatus(moduleName = false, blockName = false) {
+    if (hasSnapshot()) {
+      return snapshot.getStatus(moduleName, blockName);
+    }
     return !getErrorList(moduleName, blockName).length;
+  }
+
+  function hasSnapshot() {
+    return snapshot !== null;
   }
 
   function getSnapshot() {
@@ -85,5 +92,6 @@ module.exports = function () {
 
   return {
     addBlock, addError, addWarning, addSnapshot,
-    getModuleList, getBlockList, getErrorList, getWarningList, hasError, getStatus, getSnapshot};
+    getModuleList, getBlockList, getErrorList, getWarningList, hasError, getStatus, hasSnapshot, getSnapshot
+  };
 };
