@@ -13,7 +13,7 @@ const defaultModuleOptions = {
 function createOptions(userOptions, isRoot = true) {
   const options = _.merge({}, defaultModuleOptions, userOptions);
   if (options.snapshot === true) {
-    options.snapshot = './.bemlinter.snap';
+    options.snapshot = './.bemlinter-snap';
   }
 
   if (isRoot) {

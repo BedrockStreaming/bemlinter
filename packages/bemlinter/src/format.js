@@ -22,14 +22,23 @@ module.exports = function (lintResult, withColor = true) {
   const moduleList = lintResult.getModuleList();
   const blockCount = lintResult.getBlockList().length;
   const errorCount = lintResult.getErrorList().length;
+  const hasSnapshot = lintResult.hasSnapshot();
   let hasDetails = false;
-  
+
   moduleList.forEach(moduleName => {
     const blockList = lintResult.getBlockList(moduleName);
 
     blockList.forEach(blockName => {
-      const errorList = lintResult.getErrorList(moduleName, blockName);
-      const warningList = lintResult.getWarningList(moduleName, blockName);
+      let errorList;
+      let warningList;
+
+      if (hasSnapshot) {
+        errorList = lintResult.getSnapshot().getNewErrorList(moduleName, blockName);
+        warningList = lintResult.getSnapshot().getNewWarningList(moduleName, blockName);
+      } else {
+        errorList = lintResult.getErrorList(moduleName, blockName);
+        warningList = lintResult.getWarningList(moduleName, blockName);
+      }
 
       if (errorList.length || warningList.length) {
         formatStatus(moduleName, blockName, !errorList.length);
@@ -48,11 +57,21 @@ module.exports = function (lintResult, withColor = true) {
     format.push('');
   }
   if (errorCount) {
-    format.push(`FAIL: bemlinter has detected ${errorCount} error${errorCount > 1 ? 's' : ''} on ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
+    format.push(`${hasSnapshot ? '' : 'FAIL: '}bemlinter has detected ${errorCount} error${errorCount > 1 ? 's' : ''} on ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
   } else {
-    format.push(`OK: bemlinter has validated ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
+    format.push(`${hasSnapshot ? '' : 'OK: '}bemlinter has validated ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
   }
-  
+
+  if (hasSnapshot) {
+    const newErrorCount = lintResult.getSnapshot().getNewErrorList().length;
+
+    if (newErrorCount) {
+      format.push(`FAIL: bemlinter has detected ${newErrorCount} new error${newErrorCount > 1 ? 's' : ''}.`);
+    } else {
+      format.push(`OK: bemlinter has detected no new error.`);
+    }
+  }
+
   return format.join("\n");
 
   function formatWarning({message, filePath, line}) {
