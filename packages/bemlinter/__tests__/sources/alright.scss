@@ -7,6 +7,14 @@
   width: 29px;
   height: 29px;
 
+  &:not(.alright--hide, .alright--none) {
+    border: 1px solid hotpink;
+  }
+
+  &:hover {
+    outline: 1px solid black;
+  }
+
   &::after {
     content: '';
     position: absolute;
@@ -27,6 +35,6 @@
   position: absolute;
   top: 14px;
   right: 15px;
-  
+
   background-image: url('/assets/close.svg');
 }

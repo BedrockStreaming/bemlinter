@@ -16,7 +16,29 @@ function eachWrapper(wrapper, fn) {
 }
 
 function nodeToString(node) {
-  return typeof node.value === 'string' ? node.value : node.value.reduce((acc, child) => acc + nodeToString(child), '');
+  const result = [];
+
+  if (node.type === 'id') {
+    result.push('#');
+  } else if (node.type === 'class') {
+    result.push('.');
+  } else if (node.type === 'pseudo_class') {
+    result.push(':');
+  } else if (node.type === 'arguments') {
+    result.push('(');
+  }
+
+  if (typeof node.value === 'string') {
+    result.push(node.value);
+  } else {
+    result.push(node.value.reduce((acc, child) => acc + nodeToString(child), ''));
+  }
+
+  if (node.type === 'arguments') {
+    result.push(')');
+  }
+
+  return result.join('');
 }
 
 function eachClassName($, fn) {
@@ -116,7 +138,7 @@ function bemLintFileData(filePath, data, result, blockList, options) {
         return true;
       }
       const nextNodeType = next.get(0).type;
-      if (['space', 'punctuation', 'class', 'id'].indexOf(nextNodeType) === -1) {
+      if (['id', 'class', 'pseudo_class', 'punctuation', 'function', 'space'].indexOf(nextNodeType) === -1) {
         const selector = nodeToString(next.parent().get(0)).trim();
         result.addError(`"${selector}" should not concatenate classes.`, filePath, moduleName, blockName, wrapper);
       }
