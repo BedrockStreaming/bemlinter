@@ -6,7 +6,8 @@ const defaultModuleOptions = {
   excludeBlock: [],
   checkLowerCase: true,
   classPrefix: '',
-  filePattern: '([^.]*)\.s?css'
+  filePattern: '([^.]*)\.s?css',
+  snapshot: false
 };
 
 function createOptions(userOptions, isRoot = true) {
@@ -26,22 +27,26 @@ function createOptions(userOptions, isRoot = true) {
     });
     options.name = '__root';
   }
-  
+
   return options;
 }
 
 module.exports = userOptions => {
   const options = createOptions(userOptions);
-  
+
+  function getOptions() {
+    return options;
+  }
+
   function getFileOptions(filePath) {
     const fileOptions = _.find(options.modules, moduleOptions => {
       const globbyResult = globby.sync([filePath, ...moduleOptions.sources.map(modulePath => `!${modulePath}`)]);
       return !globbyResult.length;
     });
-    
+
     return fileOptions || options;
   }
-  
+
   function getClassPrefixList() {
     const classPrefixList = _.uniq([options.classPrefix].concat(_.map(options.modules, 'classPrefix')));
     return _.reverse(_.sortBy(classPrefixList, 'length'));
@@ -51,13 +56,13 @@ module.exports = userOptions => {
     if (options.classPrefix === classPrefix) {
       return options.name;
     }
-    
+
     const module = options.modules.find(moduleOptions => moduleOptions.classPrefix === classPrefix);
     if (!module) {
       return false
     }
     return module.name;
   }
-  
-  return {getFileOptions, getClassPrefixList, getModuleNameByClassPrefix}
+
+  return {getOptions, getFileOptions, getClassPrefixList, getModuleNameByClassPrefix}
 };

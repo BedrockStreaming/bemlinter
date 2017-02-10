@@ -1,12 +1,13 @@
 const _ = require('lodash');
 const path = require('path');
+const createSnapshot = require('./snapshot');
 
 module.exports = function () {
   const blockList = [];
   const errorList = [];
   const warningList = [];
   const basePath = process.cwd();
-  
+
   // Utils
   function formatLog(moduleName, blockName, message, filePath, wrapper) {
     return {
@@ -17,7 +18,7 @@ module.exports = function () {
       line: wrapper ? wrapper.node.start.line : null
     };
   }
-  
+
   // Setter
   function addBlock(moduleName, blockName) {
     blockList.push({moduleName, blockName});
@@ -35,7 +36,7 @@ module.exports = function () {
   function getModuleList() {
     return _.uniq(_.map(blockList, 'moduleName')).sort();
   }
-  
+
   function getBlockList(moduleName = false) {
     if (!moduleName) {
       return _.map(blockList, 'blockName');
@@ -62,16 +63,20 @@ module.exports = function () {
     }
     return _.filter(warningList, {moduleName, blockName});
   }
-  
+
   function hasError(moduleName = false, blockName = false) {
     return !getStatus(moduleName, blockName);
   }
-  
+
   function getStatus(moduleName = false, blockName = false) {
     return !getErrorList(moduleName, blockName).length;
   }
-  
+
+  function getSnapshot() {
+    return createSnapshot(this);
+  }
+
   return {
     addBlock, addError, addWarning,
-    getModuleList, getBlockList, getErrorList, getWarningList, hasError, getStatus};
+    getModuleList, getBlockList, getErrorList, getWarningList, hasError, getStatus, getSnapshot};
 };

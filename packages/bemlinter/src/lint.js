@@ -97,9 +97,9 @@ function bemLintFileData(filePath, data, result, blockList, options) {
         const classPrefix = classPrefixList.find(prefix => _.startsWith(className, prefix));
         const moduleName = options.getModuleNameByClassPrefix(classPrefix);
         const externalBlockName = bem.getBlockNameFromClass(className, classPrefix);
-        
+
         if (moduleName && blockList.indexOf(externalBlockName) !== -1) {
-          result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, moduleName, externalBlockName, wrapper); 
+          result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, moduleName, externalBlockName, wrapper);
         }
       }
     });
@@ -151,7 +151,7 @@ function getBlockList(filePathList, getFileOptions) {
     const fileOptions = getFileOptions(filePath);
     const bem = createBem(fileOptions);
     const blockName = bem.getBlockNameFromFile(filePath);
-    
+
     return getIsIsolatedBlock(fileOptions, blockName) ? blockName : false;
   }));
 }
@@ -162,7 +162,7 @@ module.exports = (sources, userOptions = {}) => {
   const options = createOptions(userOptions);
   const filePathList = globby.sync(sources);
   const blockList = getBlockList(filePathList, options.getFileOptions);
-  
+
   return Promise.all(filePathList.map(filePath => {
     return fs.readFile(filePath, {encoding:'utf8'})
       .then(data => bemLintFileData(filePath, data, result, blockList, options))
