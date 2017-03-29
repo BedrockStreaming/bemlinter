@@ -7,10 +7,10 @@ describe('gulp-bemlinter', () => {
       expect(output).toMatchSnapshot();
       done();
     };
-    
+
     gulp.src([
-        '../bemlinter/__tests__/sources/*.scss',
-        '!../bemlinter/__tests__/sources/ModuleAlright.scss'
+        '../bemlinter/__tests__/styles/*.scss',
+        '!../bemlinter/__tests__/styles/ModuleAlright.scss'
       ])
       .pipe(bemlinter())
       .pipe(bemlinter.format(false, spy));
