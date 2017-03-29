@@ -1,7 +1,7 @@
 const {lint, format} = require('../src/bemlinter.js');
 
 const snap = (fileName, done, options = {}) => {
-  lint(`${__dirname}/sources/${fileName}`, options)
+  lint(`${__dirname}/styles/${fileName}`, options)
     .then(lintResult => format(lintResult, false))
     .then(output => {
       expect(output).toMatchSnapshot();
@@ -46,7 +46,7 @@ describe('Bemlinter of mixins-content.scss', () => {
 
 describe('Bemlinter of syntax.scss', () => {
   it('should lint with 6 different syntax error', done => snap(`syntax.scss`, done));
-  
+
   it('should lint without a lower case error', done => snap(`syntax.scss`, done, {checkLowerCase: false}));
 });
 
