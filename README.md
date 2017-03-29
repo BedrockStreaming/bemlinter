@@ -10,10 +10,13 @@ A tool belt to lint bem components:
 To developers
 ------
 
-It's a monorepo managed with [lerna](https://lernajs.io/):
+It's a monorepo managed with [lerna](https://lernajs.io/).
+
+To install the project:
 
 ```sh
 npm install -g lerna@2.0.0-beta.35
+lerna bootstrap
 ```
 
 To launch tests:
