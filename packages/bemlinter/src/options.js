@@ -4,6 +4,7 @@ const path = require('path');
 
 // Settings
 const defaultModuleOptions = {
+  name: '__root',
   excludeBlock: [],
   checkLowerCase: true,
   classPrefix: '',
@@ -30,7 +31,6 @@ function createOptions(userOptions) {
   if (options.snapshot === true) {
     options.snapshot = './.bemlinter-snap';
   }
-  options.name = '__root';
   options.modules = (options.modules || []).map(moduleOptions => createModuleOptions(options, moduleOptions));
 
   return options;
