@@ -12,28 +12,28 @@ FAIL: bemlinter has detected 2 errors on 1 block."
 
 exports[`Bemlinter of leak.css should lint with a leak error 1`] = `
 "  ✗ leak
-[leak.css:11] Error: \".external-block\" is incoherent with the file name.
+[leak.css:11] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of leak.scss should lint with a leak error 1`] = `
 "  ✗ leak
-[leak.scss:10] Error: \".external-block\" is incoherent with the file name.
+[leak.scss:10] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of mixins-content.scss should lint with a leak error 1`] = `
 "  ✗ mixins-content
-[mixins-content.scss:7] Error: \".icon\" is incoherent with the file name.
+[mixins-content.scss:7] Error: \".icon\" is incoherent with the file name, \".mixins-content\" expected.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;
 
 exports[`Bemlinter of prefix.scss should lint with a missing prefix error 1`] = `
 "  ✗ prefix
-[prefix.scss:21] Error: \".prefix--big\" should have a block prefix.
+[prefix.scss:21] Error: \".prefix--big\" should have a block prefix, \".c-prefix\" expected.
 
 FAIL: bemlinter has detected 1 error on 1 block."
 `;

@@ -4,7 +4,7 @@ const paramCase = require('param-case');
 
 module.exports = function (options) {
   const blockRegExp = new RegExp(options.filePattern);
-  
+
   function getBlockNameFromFile(filePath) {
     const fileName = path.basename(filePath);
     const match = blockRegExp.exec(fileName);
@@ -27,6 +27,10 @@ module.exports = function (options) {
     return blockName;
   }
 
+  function getBaseClassFromBlockName(blockName) {
+    return `${options.classPrefix ? options.classPrefix : ''}${blockName}`;
+  }
+
   function isBlockName(className, blockName, classPrefix = options.classPrefix) {
     const prefixedBlockName = `${classPrefix}${blockName}`;
     return (
@@ -46,6 +50,7 @@ module.exports = function (options) {
   return {
     getBlockNameFromFile,
     getBlockNameFromClass,
+    getBaseClassFromBlockName,
     isBlockName,
     isClassPrefixMissing
   };

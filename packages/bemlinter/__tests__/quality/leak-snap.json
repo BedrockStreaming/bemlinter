@@ -3,7 +3,7 @@
     {
       "moduleName": "__root",
       "blockName": "leak",
-      "message": "\".external-block\" is incoherent with the file name."
+      "message": "\".external-block\" is incoherent with the file name, \".leak\" expected."
     }
   ],
   "warningList": []

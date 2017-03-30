@@ -50,7 +50,7 @@ module.exports = userOptions => {
   function matchGlob(filePath, globList) {
     const antiGlobList = globList.map(glob => `!${glob}`);
     const globbyResult = globby.sync([filePath, ...antiGlobList]);
-    console.log({filePath, antiGlobList, globbyResult});
+
     return !globbyResult.length;
   }
 

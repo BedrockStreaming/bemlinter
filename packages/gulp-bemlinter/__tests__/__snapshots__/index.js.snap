@@ -3,12 +3,12 @@ exports[`gulp-bemlinter should lint 1`] = `
 [class-concat.scss:23] Error: \"&__close\" should not concatenate classes.
 [class-concat.scss:31] Error: \"&--big\" should not concatenate classes.
   ✗ leak
-[leak.scss:10] Error: \".external-block\" is incoherent with the file name.
+[leak.scss:10] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
   ✗ mixins-content
-[mixins-content.scss:7] Error: \".icon\" is incoherent with the file name.
+[mixins-content.scss:7] Error: \".icon\" is incoherent with the file name, \".mixins-content\" expected.
   ✗ prefix
-[prefix.scss:1] Error: \".c-prefix\" is incoherent with the file name.
-[prefix.scss:26] Error: \".c-prefix__close\" is incoherent with the file name.
+[prefix.scss:1] Error: \".c-prefix\" is incoherent with the file name, \".prefix\" expected.
+[prefix.scss:26] Error: \".c-prefix__close\" is incoherent with the file name, \".prefix\" expected.
   ✗ syntax
 [syntax.scss:21] Error: \".syntax---big\" modifier should have only 2 dashes.
 [syntax.scss:26] Error: \".syntax--big--light\" should have a single modifier.

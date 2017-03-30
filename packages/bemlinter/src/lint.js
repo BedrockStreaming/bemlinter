@@ -80,11 +80,11 @@ function bemLintFileData(filePath, data, result, blockList, options) {
     eachClassName($, (className, wrapper) => {
       if (!bem.isBlockName(className, blockName)) {
         if (bem.isClassPrefixMissing(className, blockName)) {
-          result.addError(`".${className}" should have a block prefix.`, filePath, moduleName, blockName, wrapper);
+          result.addError(`".${className}" should have a block prefix, ".${bem.getBaseClassFromBlockName(blockName)}" expected.`, filePath, moduleName, blockName, wrapper);
         } else if (isClassFollowedByAPseudoClass($(wrapper))) {
           result.addWarning(`".${className}" is only tolerated in this stylesheet.`, filePath, moduleName, blockName, wrapper);
         } else {
-          result.addError(`".${className}" is incoherent with the file name.`, filePath, moduleName, blockName, wrapper);
+          result.addError(`".${className}" is incoherent with the file name, ".${bem.getBaseClassFromBlockName(blockName)}" expected.`, filePath, moduleName, blockName, wrapper);
         }
       }
     });
