@@ -136,11 +136,13 @@ Regexp used to retrieve the block name from the file name.
 
 :warning: Your regexp should contain only one capturing group.
 
+:warning: You have to escape backslashes to keep your JSON valid. 
+
 default: `'([^.]*)\.s?css'`
 
 ```json
 {
-  "filePattern": "(?:module-)?([^.]*)\.scss"
+  "filePattern": "(?:module-)?([^.]*)\\.scss"
 }
 ```
 
@@ -157,11 +159,11 @@ default: `[]`
 {
   "modules": [
     {
-      "name": 'my-module',
+      "name": "my-module",
       "sources": [
         "a/path/to/your/module/folder/*.scss",
         "a/path/to/a/module/file.scss
-      ]
+      ],
       "classPrefix": "mm-",
       "filePattern": "my-module-([^.]*)\.scss"
     }
