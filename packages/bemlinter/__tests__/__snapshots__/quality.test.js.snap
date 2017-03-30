@@ -1,0 +1,17 @@
+exports[`Bemlinter of alright.scss  should lint without errors 1`] = `
+"bemlinter has validated 1 block.
+OK: bemlinter has detected no new error."
+`;
+
+exports[`Bemlinter of leak.scss  should lint a new leak error 1`] = `
+"  ✗ leak
+[leak.scss:10] Error: \".external-block\" is incoherent with the file name.
+
+bemlinter has detected 1 error on 1 block.
+FAIL: bemlinter has detected 1 new error."
+`;
+
+exports[`Bemlinter of leak.scss  should lint without new errors 1`] = `
+"bemlinter has detected 1 error on 1 block.
+OK: bemlinter has detected no new error."
+`;
