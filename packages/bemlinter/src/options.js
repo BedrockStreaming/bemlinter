@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const globby = require('globby');
+const path = require('path');
 
 // Settings
 const defaultModuleOptions = {
@@ -24,16 +25,10 @@ function createModuleOptions(options, moduleOptions) {
   return _.merge({}, _.omit(options, 'modules', 'snapshot'), moduleOptions);
 }
 
-function createOptions(userOptions, isRoot = true) {
+function createOptions(userOptions) {
   const options = _.merge({}, defaultModuleOptions, userOptions);
   if (options.snapshot === true) {
     options.snapshot = './.bemlinter-snap';
-  }
-  if (!options.sources) {
-    console.error(`Your configuration file should have sources`);
-  }
-  if (typeof options.sources === 'string') {
-    options.sources = [options.sources];
   }
   options.name = '__root';
   options.modules = (options.modules || []).map(moduleOptions => createModuleOptions(options, moduleOptions));
@@ -52,11 +47,16 @@ module.exports = userOptions => {
     return options;
   }
 
+  function matchGlob(filePath, globList) {
+    const antiGlobList = globList.map(glob => `!${glob}`);
+    const globbyResult = globby.sync([filePath, ...antiGlobList]);
+    console.log({filePath, antiGlobList, globbyResult});
+    return !globbyResult.length;
+  }
+
   function getFileOptions(filePath) {
-    const fileOptions = _.find(options.modules, moduleOptions => {
-      const globbyResult = globby.sync([filePath, ...moduleOptions.sources.map(modulePath => `!${modulePath}`)]);
-      return !globbyResult.length;
-    });
+    const relativeFilePath = `./${path.relative(process.cwd(), filePath)}`;
+    const fileOptions = _.find(options.modules, moduleOptions => matchGlob(relativeFilePath, moduleOptions.sources));
 
     return fileOptions || options;
   }

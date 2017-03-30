@@ -24,7 +24,7 @@ describe('Bemlinter of multi-modules files', () => {
   it('should detect the module and the missing prefix', done => snapLintOutput('mixed-settings/*.scss', done, {
     modules: [{
       name: 'module',
-      sources: [`${__dirname}/styles/mixed-settings/module-prefixed.scss`],
+      sources: [`./__tests__/styles/mixed-settings/module-prefixed.scss`],
       filePattern: 'module-([^.]*)\.scss'
     }]
   }));
@@ -32,7 +32,7 @@ describe('Bemlinter of multi-modules files', () => {
   it('should detect the module and the associate leak styles', done => snapLintOutput('mixed-settings/*.scss', done, {
     modules: [{
       name: 'module',
-      sources: [`${__dirname}/styles/mixed-settings/module-prefixed.scss`],
+      sources: [`./__tests__/styles/mixed-settings/module-prefixed.scss`],
       classPrefix: 'c-',
       filePattern: 'module-([^.]*)\.scss'
     }]
