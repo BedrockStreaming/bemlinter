@@ -1,0 +1,10 @@
+{
+  "errorList": [
+    {
+      "moduleName": "__root",
+      "blockName": "leak",
+      "message": "\".external-block\" is incoherent with the file name."
+    }
+  ],
+  "warningList": []
+}

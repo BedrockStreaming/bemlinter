@@ -1,30 +1,27 @@
 const {lint, format} = require('../src/bemlinter.js');
 
-const snap = (fileName, done, options = {}) => {
+const snapLintOutput = (fileName, done, options = {}) => {
   lint(`${__dirname}/styles/${fileName}`, options)
     .then(lintResult => format(lintResult, false))
     .then(output => {
       expect(output).toMatchSnapshot();
-      done();
     })
-    .catch(error => {
-      console.error(error);
-      done();
-    })
+    .catch(console.error)
+    .then(done)
   ;
 };
 
 describe('Bemlinter of crossed styled files', () => {
-  it('should log error on both blocks', done => snap('cross-styling/*.scss', done, {classPrefix: 'c-'}));
+  it('should log error on both blocks', done => snapLintOutput('cross-styling/*.scss', done, {classPrefix: 'c-'}));
 
-  it('should not log error on the external block', done => snap('cross-styling/*.scss', done, {
+  it('should not log error on the external block', done => snapLintOutput('cross-styling/*.scss', done, {
     excludeBlock: ['external'],
     classPrefix: 'c-'
   }));
 });
 
 describe('Bemlinter of multi-modules files', () => {
-  it('should detect the module and the missing prefix', done => snap('mixed-settings/*.scss', done, {
+  it('should detect the module and the missing prefix', done => snapLintOutput('mixed-settings/*.scss', done, {
     modules: [{
       name: 'module',
       sources: [`${__dirname}/styles/mixed-settings/module-prefixed.scss`],
@@ -32,7 +29,7 @@ describe('Bemlinter of multi-modules files', () => {
     }]
   }));
 
-  it('should detect the module and the associate leak styles', done => snap('mixed-settings/*.scss', done, {
+  it('should detect the module and the associate leak styles', done => snapLintOutput('mixed-settings/*.scss', done, {
     modules: [{
       name: 'module',
       sources: [`${__dirname}/styles/mixed-settings/module-prefixed.scss`],
