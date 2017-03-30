@@ -22,7 +22,9 @@ module.exports = function () {
 
   // Setter
   function addBlock(moduleName, blockName) {
-    blockList.push({moduleName, blockName});
+    if (!_.some(blockList, {moduleName, blockName})) {
+      blockList.push({moduleName, blockName});
+    }
   }
 
   function addError(message, filePath, moduleName, blockName, wrapper) {
