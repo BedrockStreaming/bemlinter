@@ -24,3 +24,9 @@ To launch tests:
 ```sh
 lerna run test
 ```
+
+To update jest snapshots:
+
+```sh
+lerna run test -- -- -u
+```
