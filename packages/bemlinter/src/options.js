@@ -10,27 +10,33 @@ const defaultModuleOptions = {
   snapshot: false
 };
 
+function createModuleOptions(options, moduleOptions) {
+  if (!moduleOptions.name) {
+    console.error('Your module should have a name');
+  }
+  if (!moduleOptions.sources) {
+    console.error(`Your module "${moduleOptions.name}" should have sources`);
+  }
+  if (typeof moduleOptions.sources === 'string') {
+    moduleOptions.sources = [moduleOptions.sources];
+  }
+
+  return _.merge({}, _.omit(options, 'modules', 'snapshot'), moduleOptions);
+}
+
 function createOptions(userOptions, isRoot = true) {
   const options = _.merge({}, defaultModuleOptions, userOptions);
   if (options.snapshot === true) {
     options.snapshot = './.bemlinter-snap';
   }
-
-  if (isRoot) {
-    options.modules = (options.modules || []).map(moduleOptions => {
-      if (!moduleOptions.name) {
-        console.error('Your module should have a name');
-      }
-      if (!moduleOptions.sources) {
-        console.error(`Your module "${moduleOptions.name}" should have sources`);
-      }
-      if (typeof moduleOptions.sources === 'string') {
-        moduleOptions.sources = [moduleOptions.sources];
-      }
-      return _.merge({}, _.omit(options, 'modules'), createOptions(moduleOptions, false));
-    });
-    options.name = '__root';
+  if (!options.sources) {
+    console.error(`Your configuration file should have sources`);
   }
+  if (typeof options.sources === 'string') {
+    options.sources = [options.sources];
+  }
+  options.name = '__root';
+  options.modules = (options.modules || []).map(moduleOptions => createModuleOptions(options, moduleOptions));
 
   return options;
 }
