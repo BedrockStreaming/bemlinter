@@ -35,7 +35,7 @@ You will soon need more configuration, so you should use a json configuration fi
 ```json
 {
   "scripts": {
-    "lint": "bemlinter --config bemlinter.json"
+    "lint": "bemlinter lint --config bemlinter.json"
   }
 }
 ```
