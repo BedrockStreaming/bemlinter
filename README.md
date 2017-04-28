@@ -26,19 +26,19 @@ You can set your `package.json` to use bemlinter:
 }
 ```
 
-or if you need more configuration you can use a json configuration file:
+
+Configuration file
+--------
+
+You will soon need more configuration, so you should use a json configuration file:
 
 ```json
 {
   "scripts": {
-    "lint": "bemlinter --config .bemlinter"
+    "lint": "bemlinter --config bemlinter.json"
   }
 }
 ```
-
-
-Configuration file
---------
 
 The configuration allow you to define:
 
