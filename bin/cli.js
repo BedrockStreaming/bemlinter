@@ -1,50 +1,28 @@
 #!/usr/bin/env node
 
-const _ = require('lodash');
-const fs = require('mz/fs');
-const path = require('path');
+const lintCommand = require('./command/lint');
 const minimist = require('minimist');
-const {lint, format} = require('./../src/bemlinter');
 
 // Main
 const argv = minimist(process.argv.slice(2));
+const command = argv._.shift() || '';
 
-new Promise(resolve => {
-  if (!argv.config) {
-    return resolve({sources: argv._});
-  }
-  fs.readFile(argv.config, {encoding:'utf8'})
-    .then(data => JSON.parse(data))
-    .then(config => {
-      const basePath = path.dirname(argv.config);
-      config.excludePath = (config.excludePath || [])
-        .map(filePath => `!${path.resolve(basePath, filePath)}`);
-      config.sources = config.sources
-        .map(filePath => path.resolve(basePath, filePath))
-        .concat(config.excludePath);
-      resolve({
-        sources: config.sources,
-        options: _.omit(config, 'sources', 'excludePath')
-      });
-    })
-    .catch(console.error);
-})
-.then(params => {
-  if (params.sources.length < 1) {
-    console.log('Usage: ./index.js <scss-file> [<scss-file> ...]');
-    process.exit(1);
-  }
+switch (command) {
+  case 'lint':
+    lintCommand(argv);
+    break;
+  default:
+    console.log(`Unknown command "${command}"`);
+    console.log();
+    usage();
+}
 
-  return lint(params.sources, params.options);
-})
-.then(lintResult => {
-  console.log(format(lintResult));
-  if (argv.u) {
-    lintResult.getSnapshot().updateSnapshot();
-    console.log('');
-    console.log('OK: Snapshot updated');
-    process.exit(0);
-  }
-  process.exit(lintResult.getStatus() ? 0 : 1);
-})
-.catch(console.error);
+function usage() {
+  console.log('Usage: bemlinter <command> [options]');
+  console.log();
+  console.log('Command list: ');
+  console.log('  - lint: lint bem component isolation');
+  console.log();
+  process.exit(1);
+}
+
