@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const path = require('path');
-const createSnapshot = require('./snapshot');
+const {createLintResult} = require('./snapshot');
 
 module.exports = function () {
   const blockList = [];
@@ -36,7 +36,7 @@ module.exports = function () {
   }
 
   function addSnapshot(filePath) {
-    snapshot = createSnapshot(this, filePath);
+    snapshot = createLintResult(this, filePath);
     errorList = snapshot.result.errorList;
     warningList = snapshot.result.warningList;
   }
