@@ -10,7 +10,7 @@ The main rules are:
 
  
 Quick start
-------
+--------
 
 ```sh
 npm i bemlinter --save
@@ -21,16 +21,12 @@ You can set your `package.json` to use bemlinter:
 ```json
 {
   "scripts": {
-    "lint": "bemlinter the/path/to/your/*.scss"
+    "lint": "bemlinter lint the/path/to/your/*.scss"
   }
 }
 ```
 
-
-Configuration file 
-------
-
-If you need more configuration you can use a json configuration file:
+or if you need more configuration you can use a json configuration file:
 
 ```json
 {
@@ -41,135 +37,19 @@ If you need more configuration you can use a json configuration file:
 ```
 
 
-### sources
+Configuration file
+--------
 
-To define the paths of your source files.
+The configuration allow you to define:
 
-```json
-{
-  "sources": [
-    "a/path/to/your/scss/*.scss",
-    "a/path/to/a/specific/scss/main.scss
-  ]
-}
-```
-
-
-### excludePath (option)
-
-To define the paths of some exclude source files.
-
-default: `[]`
-
-```json
-{
-  "excludePath": [
-    "an/exclude/path/of/scss/*.scss"
-  ]
-}
-```
-
-
-### excludeBlock (option)
-
-To define the names of some block that are not isolated yet, so the linter will be kind ;)
-
-default: `[]`
-
-```json
-{
-  "excludeBlock": [
-    "messed-up-component",
-    "disorder-file",
-    "old-component"
-  ]
-}
-```
-
-
-### snapshot (option)
-
-A boolean if you want to monitor the quality tendency instead of targeting absolutely zero error.
-
-:information_source: You also can set a file path of your snapshot. The default path to store your snapshot is `.bemlinter-snap`.
-
-:information_source: If you use bemlinter with in command line, you can force snapshot update with `-u`.
-
-default: `false`
-
-```json
-{
-  "snapshot": true
-}
-```
-
-
-### checkLowerCase (option)
- 
-To disable lower case check.
-
-default: `true`
-
-```json
-{
-  "checkLowerCase": false
-}
-```
-
-
-### classPrefix (option)
- 
-To set the authorized class prefix.
-
-default: `''`
-
-```json
-{
-  "classPrefix": "c-"
-}
-```
-
-
-### filePattern (option)
-
-Regexp used to retrieve the block name from the file name.
-
-:warning: Your regexp should contain only one capturing group.
-
-:warning: You have to escape backslashes to keep your JSON valid. 
-
-default: `'([^.]*)\.s?css'`
-
-```json
-{
-  "filePattern": "(?:module-)?([^.]*)\\.scss"
-}
-```
-
-
-### modules (option)
-
-Allow to override global option for portions of your sources.
-
-:warning: A module should have, at least `name` and `sources` properties.
-
-default: `[]`
-
-```json
-{
-  "modules": [
-    {
-      "name": "my-module",
-      "sources": [
-        "a/path/to/your/module/folder/*.scss",
-        "a/path/to/a/module/file.scss
-      ],
-      "classPrefix": "mm-",
-      "filePattern": "my-module-([^.]*)\.scss"
-    }
-  ]
-}
-```
+ - [sources](/docs/configuration-file.md#sources): the paths of your source files.
+ - [excludePath](/docs/configuration-file.md#excludepath-option) (option): the paths of some exclude source files.
+ - [excludeBlock](/docs/configuration-file.md#excludeblock-option) (option): the names of some block that are not isolated yet.
+ - [snapshot](/docs/configuration-file.md#snapshot-option) (option): the activation of quality tendency.
+ - [checkLowerCase](/docs/configuration-file.md#checklowercase-option) (option): the deactivation of lower case check.
+ - [classPrefix](/docs/configuration-file.md#classprefix-option) (option): the class prefix.
+ - [filePattern](/docs/configuration-file.md#filepattern-option) (option): the file pattern.
+ - [modules](/docs/configuration-file.md#modules-option) (option): the configuration override for portions of your sources.
 
 
 How to Contribute
