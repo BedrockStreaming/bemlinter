@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const fs = require('fs');
+const createLog = require('./log');
 
 function getSnapshotLog(log) {
   return _.pick(log, ['moduleName', 'blockName', 'message']);
@@ -44,7 +45,13 @@ function addLogAntecedence(lintResult, antecedenceLogs) {
   };
 }
 
-module.exports = function createSnapshot(lintResult, filePath) {
+function createSnapshot(filePath) {
+  const snapshotLogs = getSnapshotLogsFromFile(filePath);
+
+  return createLog(snapshotLogs);
+}
+
+function createLintResult(lintResult, filePath) {
   const snapshotLogs = getSnapshotLogsFromFile(filePath);
   const lintResultWithAntecedence = addLogAntecedence(lintResult, snapshotLogs);
 
@@ -98,3 +105,5 @@ module.exports = function createSnapshot(lintResult, filePath) {
     result: lintResultWithAntecedence
   };
 };
+
+module.exports = {createSnapshot, createLintResult};
