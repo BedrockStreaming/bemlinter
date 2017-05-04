@@ -1,5 +1,5 @@
 .bemlintrc
 .bemlinter-snap
+.eslintcache
 npm-debug.log
-lerna-debug.log
 node_modules/

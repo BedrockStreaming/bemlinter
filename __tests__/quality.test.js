@@ -1,22 +1,22 @@
-const {lint, format} = require('../src/bemlinter.js');
+const { lint, format } = require('../src/bemlinter.js');
 const fs = require('fs');
 
 const toFilePath = (fileName, type) => `${__dirname}/${type}/${fileName}`;
 
-const snapLintOutput = lintResult => {
+const snapLintOutput = (lintResult) => {
   const output = format(lintResult, false);
   expect(output).toMatchSnapshot();
 
   return output;
 };
 
-const expectNewError = errorLength => lintResult => {
+const expectNewError = errorLength => (lintResult) => {
   expect(lintResult.getSnapshot().getNewErrorList().length).toBe(errorLength);
 
   return lintResult;
 };
 
-const expectFileCreated = filePath => lintResult => {
+const expectFileCreated = filePath => (lintResult) => {
   expect(fs.existsSync(filePath)).toBe(true);
   fs.unlinkSync(filePath);
 

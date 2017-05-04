@@ -1,8 +1,7 @@
 const _ = require('lodash');
 const fs = require('mz/fs');
-const colors = require('colors');
 const globby = require('globby');
-const {parse} = require('scss-parser');
+const { parse } = require('scss-parser');
 const createQueryAst = require('query-ast');
 
 // Local
@@ -11,8 +10,8 @@ const createResult = require('./result.js');
 const createOptions = require('./options.js');
 
 // AST
-function eachWrapper(wrapper, fn) {
-  for (let n of wrapper.nodes) { fn(n) }
+function eachWrapper(wrapper, callback) {
+  _.each(wrapper.nodes, callback);
 }
 
 function nodeToString(node) {
@@ -42,7 +41,7 @@ function nodeToString(node) {
 }
 
 function eachClassName($, fn) {
-  eachWrapper($('class').find('identifier'), wrapper => {
+  eachWrapper($('class').find('identifier'), (wrapper) => {
     const className = wrapper.node.value;
     fn(className, wrapper);
   });
@@ -68,13 +67,6 @@ function bemLintFileData(filePath, data, result, blockList, options) {
   const ast = parse(data);
   const $ = createQueryAst(ast);
 
-  checkSelector();
-  checkBemSyntaxClassName();
-  if (isIsolatedBlock) {
-    checkInternalClassName();
-  }
-  checkExternalClassName();
-
   // Checker
   function checkInternalClassName() {
     eachClassName($, (className, wrapper) => {
@@ -95,11 +87,11 @@ function bemLintFileData(filePath, data, result, blockList, options) {
       if (!bem.isBlockName(className, blockName)) {
         const classPrefixList = options.getClassPrefixList();
         const classPrefix = classPrefixList.find(prefix => _.startsWith(className, prefix));
-        const moduleName = options.getModuleNameByClassPrefix(classPrefix);
+        const classModuleName = options.getModuleNameByClassPrefix(classPrefix);
         const externalBlockName = bem.getBlockNameFromClass(className, classPrefix);
 
-        if (moduleName && blockList.indexOf(externalBlockName) !== -1) {
-          result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, moduleName, externalBlockName, wrapper);
+        if (classModuleName && blockList.indexOf(externalBlockName) !== -1) {
+          result.addError(`".${className}" should not be styled outside of its own stylesheet.`, filePath, classModuleName, externalBlockName, wrapper);
         }
       }
     });
@@ -129,13 +121,13 @@ function bemLintFileData(filePath, data, result, blockList, options) {
   }
 
   function checkSelector() {
-    eachWrapper($('operator'), wrapper => {
+    eachWrapper($('operator'), (wrapper) => {
       if (wrapper.node.value !== '&') {
-        return true;
+        return;
       }
       const next = $(wrapper).next();
       if (!next.length()) {
-        return true;
+        return;
       }
       const nextNodeType = next.get(0).type;
       if (['id', 'class', 'pseudo_class', 'punctuation', 'function', 'space'].indexOf(nextNodeType) === -1) {
@@ -144,10 +136,17 @@ function bemLintFileData(filePath, data, result, blockList, options) {
       }
     });
   }
+
+  checkSelector();
+  checkBemSyntaxClassName();
+  if (isIsolatedBlock) {
+    checkInternalClassName();
+  }
+  checkExternalClassName();
 }
 
 function getBlockList(filePathList, getFileOptions) {
-  return _.filter(filePathList.map(filePath => {
+  return _.filter(filePathList.map((filePath) => {
     const fileOptions = getFileOptions(filePath);
     const bem = createBem(fileOptions);
     const blockName = bem.getBlockNameFromFile(filePath);
@@ -163,16 +162,14 @@ module.exports = (sources, userOptions = {}) => {
   const filePathList = globby.sync(sources);
   const blockList = getBlockList(filePathList, options.getFileOptions);
 
-  return Promise.all(filePathList.map(filePath => {
-    return fs.readFile(filePath, {encoding:'utf8'})
+  return Promise.all(filePathList.map(filePath => fs.readFile(filePath, { encoding: 'utf8' })
       .then(data => bemLintFileData(filePath, data, result, blockList, options))
-      .catch(error => {
+      .catch((error) => {
         const fileOptions = options.getFileOptions(filePath);
         const bem = createBem(fileOptions);
         const blockName = bem.getBlockNameFromFile(filePath);
         result.addError(`${error.message}`, filePath, fileOptions.name, blockName);
-      });
-    }))
+      })))
     .then(() => {
       const snapshotFilePath = options.getOptions('snapshot');
       if (snapshotFilePath !== false) {

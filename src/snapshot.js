@@ -21,7 +21,7 @@ function getSnapshotLogsFromFile(filePath) {
   const data = fs.readFileSync(filePath).toString();
   try {
     return JSON.parse(data);
-  } catch(error) {
+  } catch (error) {
     return false;
   }
 }
@@ -30,10 +30,11 @@ function addLogAntecedence(lintResult, antecedenceLogs) {
   const isSnapshotExists = antecedenceLogs !== false;
   const completeLogList = (logList, logType) => {
     const hasAntecedence = log => _.some(antecedenceLogs[`${logType}List`], getSnapshotLog(log));
-    const completeLog = log => {
-      log.isNew = isSnapshotExists && !hasAntecedence(log);
+    const completeLog = (log) => {
+      const logWithAntecedence = log;
+      logWithAntecedence.isNew = isSnapshotExists && !hasAntecedence(log);
 
-      return log;
+      return logWithAntecedence;
     };
 
     return logList.map(completeLog);
@@ -55,8 +56,37 @@ function createLintResult(lintResult, filePath) {
   const snapshotLogs = getSnapshotLogsFromFile(filePath);
   const lintResultWithAntecedence = addLogAntecedence(lintResult, snapshotLogs);
 
-  if (shouldUpdateSnapshot()) {
-    updateSnapshot();
+  function getFilterCriteria(moduleName, blockName) {
+    const criteria = { isNew: true };
+    if (moduleName) {
+      criteria.moduleName = moduleName;
+      if (blockName) {
+        criteria.blockName = blockName;
+      }
+    }
+
+    return criteria;
+  }
+
+  function getNewErrorList(moduleName = false, blockName = false) {
+    return _.filter(
+      lintResultWithAntecedence.errorList,
+      getFilterCriteria(moduleName, blockName),
+    );
+  }
+
+  function getNewWarningList(moduleName = false, blockName = false) {
+    return _.filter(
+      lintResultWithAntecedence.warningList,
+      getFilterCriteria(moduleName, blockName),
+    );
+  }
+
+  function getStatus(moduleName = false, blockName = false) {
+    return !_.some(
+      lintResultWithAntecedence.errorList,
+      getFilterCriteria(moduleName, blockName),
+    );
   }
 
   function isSnapshotExists() {
@@ -68,7 +98,10 @@ function createLintResult(lintResult, filePath) {
       return true;
     }
 
-    return (getStatus() && lintResultWithAntecedence.errorList.length < snapshotLogs.errorList.length);
+    return (
+      getStatus() &&
+      lintResultWithAntecedence.errorList.length < snapshotLogs.errorList.length
+    );
   }
 
   function updateSnapshot() {
@@ -76,34 +109,18 @@ function createLintResult(lintResult, filePath) {
     fs.writeFileSync(filePath, JSON.stringify(newSnapshotLogs, null, 2));
   }
 
-  function getFilterCriteria(moduleName, blockName) {
-    const criteria = {isNew: true};
-    if (moduleName) {
-      criteria.moduleName = moduleName;
-      if (blockName) {
-        criteria.blockName = blockName;
-      }
-    }
-
-    return criteria;
-  }
-
-  function getStatus(moduleName = false, blockName = false) {
-    return !_.some(lintResultWithAntecedence.errorList, getFilterCriteria(moduleName, blockName));
-  }
-
-  function getNewErrorList(moduleName = false, blockName = false) {
-    return _.filter(lintResultWithAntecedence.errorList, getFilterCriteria(moduleName, blockName));
-  }
-
-  function getNewWarningList(moduleName = false, blockName = false) {
-    return _.filter(lintResultWithAntecedence.warningList, getFilterCriteria(moduleName, blockName));
+  if (shouldUpdateSnapshot()) {
+    updateSnapshot();
   }
 
   return {
-    isSnapshotExists, getNewErrorList, getNewWarningList, getStatus, updateSnapshot,
-    result: lintResultWithAntecedence
+    isSnapshotExists,
+    getNewErrorList,
+    getNewWarningList,
+    getStatus,
+    updateSnapshot,
+    result: lintResultWithAntecedence,
   };
-};
+}
 
-module.exports = {createSnapshot, createLintResult};
+module.exports = { createSnapshot, createLintResult };

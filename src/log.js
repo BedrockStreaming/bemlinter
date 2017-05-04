@@ -1,7 +1,6 @@
 const _ = require('lodash');
 
 function createLog(logs) {
-
   function getFilterCriteria(moduleName, blockName) {
     const criteria = {};
     if (moduleName) {
@@ -22,15 +21,15 @@ function createLog(logs) {
     return _.filter(logs.warningList, getFilterCriteria(moduleName, blockName));
   }
 
-  function hasError(moduleName = false, blockName = false) {
-    return !getStatus(moduleName, blockName);
-  }
-
   function getStatus(moduleName = false, blockName = false) {
     return !getErrorList(moduleName, blockName).length;
   }
 
-  return {getErrorList, getWarningList, hasError, getStatus};
+  function hasError(moduleName = false, blockName = false) {
+    return !getStatus(moduleName, blockName);
+  }
+
+  return { getErrorList, getWarningList, hasError, getStatus };
 }
 
 module.exports = createLog;

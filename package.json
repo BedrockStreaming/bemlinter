@@ -7,7 +7,8 @@
     "bemlinter": "./bin/cli.js"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint --cache '{src,bin}/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,9 @@
     "node": ">=6"
   },
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.1.3",
+    "eslint-plugin-import": "^2.2.0",
     "jest": "^18.1.0"
   }
 }
