@@ -2,7 +2,7 @@ const _ = require('lodash');
 const path = require('path');
 const paramCase = require('param-case');
 
-module.exports = function (options) {
+function createBem(options) {
   const blockRegExp = new RegExp(options.filePattern);
 
   function getBlockNameFromFile(filePath) {
@@ -52,6 +52,8 @@ module.exports = function (options) {
     getBlockNameFromClass,
     getBaseClassFromBlockName,
     isBlockName,
-    isClassPrefixMissing
+    isClassPrefixMissing,
   };
-};
+}
+
+module.exports = createBem;

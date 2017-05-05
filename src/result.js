@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const path = require('path');
-const {createLintResult} = require('./snapshot');
+const { createLintResult } = require('./snapshot');
 
-module.exports = function () {
+function createResult() {
   const blockList = [];
   let errorList = [];
   let warningList = [];
@@ -16,14 +16,14 @@ module.exports = function () {
       filePath: `./${path.relative(basePath, filePath)}`,
       moduleName,
       blockName,
-      line: wrapper ? wrapper.node.start.line : null
+      line: wrapper ? wrapper.node.start.line : null,
     };
   }
 
   // Setter
   function addBlock(moduleName, blockName) {
-    if (!_.some(blockList, {moduleName, blockName})) {
-      blockList.push({moduleName, blockName});
+    if (!_.some(blockList, { moduleName, blockName })) {
+      blockList.push({ moduleName, blockName });
     }
   }
 
@@ -42,6 +42,14 @@ module.exports = function () {
   }
 
   // Getter
+  function hasSnapshot() {
+    return snapshot !== null;
+  }
+
+  function getSnapshot() {
+    return snapshot;
+  }
+
   function getModuleList() {
     return _.uniq(_.map(blockList, 'moduleName')).sort();
   }
@@ -50,7 +58,7 @@ module.exports = function () {
     if (!moduleName) {
       return _.map(blockList, 'blockName');
     }
-    return _.map(_.filter(blockList, {moduleName}), 'blockName').sort();
+    return _.map(_.filter(blockList, { moduleName }), 'blockName').sort();
   }
 
   function getErrorList(moduleName = false, blockName = false) {
@@ -58,9 +66,9 @@ module.exports = function () {
       return errorList;
     }
     if (!blockName) {
-      return _.filter(errorList, {moduleName});
+      return _.filter(errorList, { moduleName });
     }
-    return _.filter(errorList, {moduleName, blockName});
+    return _.filter(errorList, { moduleName, blockName });
   }
 
   function getWarningList(moduleName = false, blockName = false) {
@@ -68,13 +76,9 @@ module.exports = function () {
       return warningList;
     }
     if (!blockName) {
-      return _.filter(warningList, {moduleName});
+      return _.filter(warningList, { moduleName });
     }
-    return _.filter(warningList, {moduleName, blockName});
-  }
-
-  function hasError(moduleName = false, blockName = false) {
-    return !getStatus(moduleName, blockName);
+    return _.filter(warningList, { moduleName, blockName });
   }
 
   function getStatus(moduleName = false, blockName = false) {
@@ -84,16 +88,24 @@ module.exports = function () {
     return !getErrorList(moduleName, blockName).length;
   }
 
-  function hasSnapshot() {
-    return snapshot !== null;
-  }
-
-  function getSnapshot() {
-    return snapshot;
+  function hasError(moduleName = false, blockName = false) {
+    return !getStatus(moduleName, blockName);
   }
 
   return {
-    addBlock, addError, addWarning, addSnapshot,
-    getModuleList, getBlockList, getErrorList, getWarningList, hasError, getStatus, hasSnapshot, getSnapshot
+    addBlock,
+    addError,
+    addWarning,
+    addSnapshot,
+    getModuleList,
+    getBlockList,
+    getErrorList,
+    getWarningList,
+    hasError,
+    getStatus,
+    hasSnapshot,
+    getSnapshot,
   };
-};
+}
+
+module.exports = createResult;

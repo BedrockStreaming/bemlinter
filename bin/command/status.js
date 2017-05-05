@@ -1,7 +1,7 @@
 const createOptions = require('../../src/options.js');
-const {createSnapshot} = require('../../src/snapshot');
+const { createSnapshot } = require('../../src/snapshot');
 
-function statusCommand({userOptions}) {
+function statusCommand({ userOptions }) {
   const options = createOptions(userOptions);
   const snapshotFilePath = options.getOptions('snapshot');
   if (snapshotFilePath === false) {

@@ -1,6 +1,6 @@
-const {lint, format} = require('../../src/bemlinter');
+const { lint, format } = require('../../src/bemlinter');
 
-function lintCommand({sources, userOptions, argv}) {
+function lintCommand({ sources, userOptions, argv }) {
   if (sources.length < 1) {
     console.log('Usage: bemlinter lint <scss-file> [<scss-file> ...]');
     console.log('');
@@ -8,7 +8,7 @@ function lintCommand({sources, userOptions, argv}) {
   }
 
   return lint(sources, userOptions)
-    .then(lintResult => {
+    .then((lintResult) => {
       console.log(format(lintResult));
 
       if (argv.u) {

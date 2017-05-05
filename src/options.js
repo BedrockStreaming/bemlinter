@@ -8,19 +8,20 @@ const defaultModuleOptions = {
   excludeBlock: [],
   checkLowerCase: true,
   classPrefix: '',
-  filePattern: '([^.]*)\.s?css',
-  snapshot: false
+  filePattern: '([^.]*)\\.s?css',
+  snapshot: false,
 };
 
-function createModuleOptions(options, moduleOptions) {
-  if (!moduleOptions.name) {
+function createModuleOptions(options, userModuleOptions) {
+  const moduleOptions = userModuleOptions;
+  if (!userModuleOptions.name) {
     console.error('Your module should have a name');
   }
-  if (!moduleOptions.sources) {
+  if (!userModuleOptions.sources) {
     console.error(`Your module "${moduleOptions.name}" should have sources`);
   }
-  if (typeof moduleOptions.sources === 'string') {
-    moduleOptions.sources = [moduleOptions.sources];
+  if (typeof userModuleOptions.sources === 'string') {
+    moduleOptions.sources = [userModuleOptions.sources];
   }
 
   return _.merge({}, _.omit(options, 'modules', 'snapshot'), moduleOptions);
@@ -31,17 +32,18 @@ function createOptions(userOptions) {
   if (options.snapshot === true) {
     options.snapshot = './.bemlinter-snap';
   }
-  options.modules = (options.modules || []).map(moduleOptions => createModuleOptions(options, moduleOptions));
+  options.modules = (options.modules || [])
+    .map(moduleOptions => createModuleOptions(options, moduleOptions));
 
   return options;
 }
 
-module.exports = userOptions => {
+module.exports = (userOptions) => {
   const options = createOptions(userOptions);
 
   function getOptions(optionName) {
     if (optionName) {
-      return options[optionName]
+      return options[optionName];
     }
 
     return options;
@@ -56,7 +58,9 @@ module.exports = userOptions => {
 
   function getFileOptions(filePath) {
     const relativeFilePath = `./${path.relative(process.cwd(), filePath)}`;
-    const fileOptions = _.find(options.modules, moduleOptions => matchGlob(relativeFilePath, moduleOptions.sources));
+    const fileOptions = _.find(options.modules, moduleOptions =>
+      matchGlob(relativeFilePath, moduleOptions.sources),
+    );
 
     return fileOptions || options;
   }
@@ -73,10 +77,10 @@ module.exports = userOptions => {
 
     const module = options.modules.find(moduleOptions => moduleOptions.classPrefix === classPrefix);
     if (!module) {
-      return false
+      return false;
     }
     return module.name;
   }
 
-  return {getOptions, getFileOptions, getClassPrefixList, getModuleNameByClassPrefix}
+  return { getOptions, getFileOptions, getClassPrefixList, getModuleNameByClassPrefix };
 };

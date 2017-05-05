@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const path = require('path');
 const colors = require('colors');
 
@@ -17,18 +16,34 @@ function getContextualMessage(message, filePath, line) {
   return contextualMessage.join('');
 }
 
-module.exports = function (lintResult, withColor = true) {
-  const format = [];
+function format(lintResult, withColor = true) {
+  const output = [];
   const moduleList = lintResult.getModuleList();
   const blockCount = lintResult.getBlockList().length;
   const errorCount = lintResult.getErrorList().length;
   const hasSnapshot = lintResult.hasSnapshot();
   let hasDetails = false;
 
-  moduleList.forEach(moduleName => {
+  function formatWarning({ message, filePath, line }) {
+    output.push(getContextualMessage(`Warning: ${message}`, filePath, line));
+  }
+
+  function formatError({ message, filePath, line }) {
+    output.push(getContextualMessage(`Error: ${message}`, filePath, line));
+  }
+
+  function formatStatus(moduleName, blockName, blockStatus) {
+    let line = `  ${blockStatus ? '✓' : '✗'} ${moduleName !== '__root' ? `${moduleName} / ` : ''}${blockName}`;
+    if (withColor) {
+      line = colors[blockStatus ? 'green' : 'red'](line);
+    }
+    output.push(line);
+  }
+
+  moduleList.forEach((moduleName) => {
     const blockList = lintResult.getBlockList(moduleName);
 
-    blockList.forEach(blockName => {
+    blockList.forEach((blockName) => {
       let errorList;
       let warningList;
 
@@ -54,39 +69,25 @@ module.exports = function (lintResult, withColor = true) {
   });
 
   if (hasDetails) {
-    format.push('');
+    output.push('');
   }
   if (errorCount) {
-    format.push(`${hasSnapshot ? '' : 'FAIL: '}bemlinter has detected ${errorCount} error${errorCount > 1 ? 's' : ''} on ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
+    output.push(`${hasSnapshot ? '' : 'FAIL: '}bemlinter has detected ${errorCount} error${errorCount > 1 ? 's' : ''} on ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
   } else {
-    format.push(`${hasSnapshot ? '' : 'OK: '}bemlinter has validated ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
+    output.push(`${hasSnapshot ? '' : 'OK: '}bemlinter has validated ${blockCount} block${blockCount > 1 ? 's' : ''}.`);
   }
 
   if (hasSnapshot) {
     const newErrorCount = lintResult.getSnapshot().getNewErrorList().length;
 
     if (newErrorCount) {
-      format.push(`FAIL: bemlinter has detected ${newErrorCount} new error${newErrorCount > 1 ? 's' : ''}.`);
+      output.push(`FAIL: bemlinter has detected ${newErrorCount} new error${newErrorCount > 1 ? 's' : ''}.`);
     } else {
-      format.push(`OK: bemlinter has detected no new error.`);
+      output.push('OK: bemlinter has detected no new error.');
     }
   }
 
-  return format.join("\n");
+  return output.join('\n');
+}
 
-  function formatWarning({message, filePath, line}) {
-    format.push(getContextualMessage(`Warning: ${message}`, filePath, line));
-  }
-
-  function formatError({message, filePath, line}) {
-    format.push(getContextualMessage(`Error: ${message}`, filePath, line));
-  }
-
-  function formatStatus(moduleName, blockName, blockStatus) {
-    let line = `  ${blockStatus ? '✓' : '✗'} ${moduleName !== '__root' ? `${moduleName} / ` : ''}${blockName}`;
-    if (withColor) {
-      line = colors[blockStatus ? 'green' : 'red'](line);
-    }
-    format.push(line);
-  }
-};
+module.exports = format;
