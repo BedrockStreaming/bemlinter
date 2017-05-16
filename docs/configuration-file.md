@@ -121,10 +121,10 @@ default: `[]`
       "name": "my-module",
       "sources": [
         "a/path/to/your/module/folder/*.scss",
-        "a/path/to/a/module/file.scss
+        "a/path/to/a/module/file.scss"
       ],
       "classPrefix": "mm-",
-      "filePattern": "my-module-([^.]*)\.scss"
+      "filePattern": "my-module-([^.]*)\\.scss"
     }
   ]
 }

@@ -17,7 +17,7 @@ describe('Bemlinter of alright.scss', () => {
 
 describe('Bemlinter of ModuleAlright.scss', () => {
   it('should lint without error', done => snapLintOutput('ModuleAlright.scss', done, {
-    filePattern: '(?:Module)?([^.]*)\.scss',
+    filePattern: '(?:Module)?([^.]*)\\.scss',
   }));
 });
 
