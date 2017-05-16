@@ -6,10 +6,14 @@ function getSnapshotLog(log) {
   return _.pick(log, ['moduleName', 'blockName', 'message']);
 }
 
+function getSnapshotLogList(list) {
+  return _.sortBy(list.map(getSnapshotLog), ['moduleName', 'blockName', 'message']);
+}
+
 function getSnapshotLogsFromResult(lintResult) {
   return {
-    errorList: lintResult.getErrorList().map(getSnapshotLog),
-    warningList: lintResult.getWarningList().map(getSnapshotLog),
+    errorList: getSnapshotLogList(lintResult.getErrorList()),
+    warningList: getSnapshotLogList(lintResult.getWarningList()),
   };
 }
 
