@@ -16,7 +16,7 @@ function createResult() {
       filePath: `./${path.relative(basePath, filePath)}`,
       moduleName,
       blockName,
-      line: wrapper ? wrapper.node.start.line : null,
+      line: wrapper ? wrapper.node.start.line : null
     };
   }
 
@@ -104,7 +104,7 @@ function createResult() {
     hasError,
     getStatus,
     hasSnapshot,
-    getSnapshot,
+    getSnapshot
   };
 }
 

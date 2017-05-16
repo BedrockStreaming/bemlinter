@@ -13,7 +13,7 @@ function getSnapshotLogList(list) {
 function getSnapshotLogsFromResult(lintResult) {
   return {
     errorList: getSnapshotLogList(lintResult.getErrorList()),
-    warningList: getSnapshotLogList(lintResult.getWarningList()),
+    warningList: getSnapshotLogList(lintResult.getWarningList())
   };
 }
 
@@ -46,7 +46,7 @@ function addLogAntecedence(lintResult, antecedenceLogs) {
 
   return {
     errorList: completeLogList(lintResult.getErrorList(), 'error'),
-    warningList: completeLogList(lintResult.getWarningList(), 'warning'),
+    warningList: completeLogList(lintResult.getWarningList(), 'warning')
   };
 }
 
@@ -75,21 +75,21 @@ function createLintResult(lintResult, filePath) {
   function getNewErrorList(moduleName = false, blockName = false) {
     return _.filter(
       lintResultWithAntecedence.errorList,
-      getFilterCriteria(moduleName, blockName),
+      getFilterCriteria(moduleName, blockName)
     );
   }
 
   function getNewWarningList(moduleName = false, blockName = false) {
     return _.filter(
       lintResultWithAntecedence.warningList,
-      getFilterCriteria(moduleName, blockName),
+      getFilterCriteria(moduleName, blockName)
     );
   }
 
   function getStatus(moduleName = false, blockName = false) {
     return !_.some(
       lintResultWithAntecedence.errorList,
-      getFilterCriteria(moduleName, blockName),
+      getFilterCriteria(moduleName, blockName)
     );
   }
 
@@ -123,7 +123,7 @@ function createLintResult(lintResult, filePath) {
     getNewWarningList,
     getStatus,
     updateSnapshot,
-    result: lintResultWithAntecedence,
+    result: lintResultWithAntecedence
   };
 }
 

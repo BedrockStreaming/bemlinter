@@ -52,7 +52,7 @@ function createBem(options) {
     getBlockNameFromClass,
     getBaseClassFromBlockName,
     isBlockName,
-    isClassPrefixMissing,
+    isClassPrefixMissing
   };
 }
 

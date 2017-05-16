@@ -24,7 +24,7 @@ function getConfigData(argv) {
       resolve({
         sources,
         userOptions: {},
-        argv: _.omit(argv, '_'),
+        argv: _.omit(argv, '_')
       });
     }
 
@@ -42,7 +42,7 @@ function getConfigData(argv) {
         resolve({
           sources: config.sources,
           userOptions: _.omit(config, 'sources', 'excludePath'),
-          argv: _.omit(argv, 'config'),
+          argv: _.omit(argv, 'config')
         });
       })
       .catch(console.error);

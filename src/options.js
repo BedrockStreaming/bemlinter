@@ -9,7 +9,7 @@ const defaultModuleOptions = {
   checkLowerCase: true,
   classPrefix: '',
   filePattern: '([^.]*)\\.s?css',
-  snapshot: false,
+  snapshot: false
 };
 
 function createModuleOptions(options, userModuleOptions) {
@@ -59,7 +59,7 @@ module.exports = (userOptions) => {
   function getFileOptions(filePath) {
     const relativeFilePath = `./${path.relative(process.cwd(), filePath)}`;
     const fileOptions = _.find(options.modules, moduleOptions =>
-      matchGlob(relativeFilePath, moduleOptions.sources),
+      matchGlob(relativeFilePath, moduleOptions.sources)
     );
 
     return fileOptions || options;
