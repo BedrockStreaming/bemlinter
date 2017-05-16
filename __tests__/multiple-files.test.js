@@ -25,7 +25,7 @@ describe('Bemlinter of multi-modules files', () => {
     modules: [{
       name: 'module',
       sources: ['./__tests__/styles/mixed-settings/module-prefixed.scss'],
-      filePattern: 'module-([^.]*)\.scss',
+      filePattern: 'module-([^.]*)\\.scss',
     }],
   }));
 
@@ -34,7 +34,7 @@ describe('Bemlinter of multi-modules files', () => {
       name: 'module',
       sources: ['./__tests__/styles/mixed-settings/module-prefixed.scss'],
       classPrefix: 'c-',
-      filePattern: 'module-([^.]*)\.scss',
+      filePattern: 'module-([^.]*)\\.scss',
     }],
   }));
 });
