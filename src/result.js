@@ -88,6 +88,29 @@ function createResult() {
     return !getErrorList(moduleName, blockName).length;
   }
 
+  function getLabel(moduleName = false, blockName = false) {
+    const errorCount = getErrorList(moduleName, blockName).length;
+    const warningCount = getWarningList(moduleName, blockName).length;
+    const blockCount = getBlockList(moduleName).length;
+    const label = [];
+
+    if (errorCount) {
+      label.push(`${errorCount} error${errorCount > 1 ? 's' : ''}`);
+    } else {
+      label.push('no error');
+    }
+    if (warningCount) {
+      label.push(`and ${warningCount} warning${warningCount > 1 ? 's' : ''}`);
+    }
+    if (blockName === false) {
+      label.push(`on ${blockCount} block${blockCount > 1 ? 's' : ''}`);
+    } else {
+      label.push(`on the block named "${blockName}"`);
+    }
+
+    return label.join(' ');
+  }
+
   function hasError(moduleName = false, blockName = false) {
     return !getStatus(moduleName, blockName);
   }
@@ -103,6 +126,7 @@ function createResult() {
     getWarningList,
     hasError,
     getStatus,
+    getLabel,
     hasSnapshot,
     getSnapshot
   };

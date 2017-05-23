@@ -12,6 +12,7 @@ function getSnapshotLogList(list) {
 
 function getSnapshotLogsFromResult(lintResult) {
   return {
+    label: lintResult.getLabel(),
     errorList: getSnapshotLogList(lintResult.getErrorList()),
     warningList: getSnapshotLogList(lintResult.getWarningList())
   };
