@@ -25,6 +25,8 @@ function nodeToString(node) {
     result.push(':');
   } else if (node.type === 'arguments') {
     result.push('(');
+  } else if (node.type === 'attribute') {
+    result.push('[');
   }
 
   if (typeof node.value === 'string') {
@@ -35,6 +37,8 @@ function nodeToString(node) {
 
   if (node.type === 'arguments') {
     result.push(')');
+  } else if (node.type === 'attribute') {
+    result.push(']');
   }
 
   return result.join('');
