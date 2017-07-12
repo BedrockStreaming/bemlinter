@@ -1,5 +1,5 @@
 .class-concat {
-  
+
   &{
     display: block;
     position: absolute;
@@ -37,7 +37,7 @@
       right: 30px;
     }
   }
-  
+
   &.class-concat--big {
     width: 64px;
     height: 64px;
@@ -46,5 +46,9 @@
   &#dontDoThat {
     width: 666px;
     height: 666px;
+  }
+
+  &[type="text"] {
+    border: 0;
   }
 }

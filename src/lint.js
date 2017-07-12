@@ -130,7 +130,7 @@ function bemLintFileData(filePath, data, result, blockList, options) {
         return;
       }
       const nextNodeType = next.get(0).type;
-      if (['id', 'class', 'pseudo_class', 'punctuation', 'function', 'space'].indexOf(nextNodeType) === -1) {
+      if (['id', 'class', 'attribute', 'pseudo_class', 'punctuation', 'function', 'space'].indexOf(nextNodeType) === -1) {
         const selector = nodeToString(next.parent().get(0)).trim();
         result.addError(`"${selector}" should not concatenate classes.`, filePath, moduleName, blockName, wrapper);
       }
