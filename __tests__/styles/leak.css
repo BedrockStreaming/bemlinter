@@ -8,8 +8,12 @@
     height: 29px;
 }
 
-.leak .external-block {
+.leak.external-block {
     display: none;
+}
+
+.leak:not(.another-block) {
+  display: none;
 }
 
 .leak::after {

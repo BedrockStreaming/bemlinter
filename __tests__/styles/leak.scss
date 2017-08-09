@@ -6,8 +6,12 @@
   transform: translateY(-50%);
   width: 29px;
   height: 29px;
-  
+
   .external-block {
+    display: none;
+  }
+
+  &:not(.another-block) {
     display: none;
   }
 
@@ -31,6 +35,6 @@
   position: absolute;
   top: 14px;
   right: 15px;
-  
+
   background-image: url('/assets/close.svg');
 }

@@ -52,7 +52,12 @@ function eachClassName($, fn) {
 }
 
 function isClassFollowedByAPseudoClass($wrapper) {
-  return $wrapper.parent().next().get(0).type === 'pseudo_class';
+  const $nextWrapper = $wrapper.parent().next();
+  if (!$nextWrapper.length()) {
+    return false;
+  }
+
+  return $nextWrapper.get(0).type === 'pseudo_class';
 }
 
 function getIsIsolatedBlock(fileOptions, blockName) {
@@ -166,14 +171,17 @@ module.exports = (sources, userOptions = {}) => {
   const filePathList = globby.sync(sources);
   const blockList = getBlockList(filePathList, options.getFileOptions);
 
-  return Promise.all(filePathList.map(filePath => fs.readFile(filePath, { encoding: 'utf8' })
-      .then(data => bemLintFileData(filePath, data, result, blockList, options))
-      .catch((error) => {
-        const fileOptions = options.getFileOptions(filePath);
-        const bem = createBem(fileOptions);
-        const blockName = bem.getBlockNameFromFile(filePath);
-        result.addError(`${error.message}`, filePath, fileOptions.name, blockName);
-      })))
+  return Promise.all(
+      filePathList.map(filePath => fs.readFile(filePath, { encoding: 'utf8' })
+        .then(data => bemLintFileData(filePath, data, result, blockList, options))
+        .catch((error) => {
+          const fileOptions = options.getFileOptions(filePath);
+          const bem = createBem(fileOptions);
+          const blockName = bem.getBlockNameFromFile(filePath);
+          result.addError(`${error.message}`, filePath, fileOptions.name, blockName);
+        })
+      )
+    )
     .then(() => {
       const snapshotFilePath = options.getOptions('snapshot');
       if (snapshotFilePath !== false) {
