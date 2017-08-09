@@ -3,15 +3,25 @@ exports[`Bemlinter of alright.scss  should lint without errors 1`] = `
 OK: bemlinter has detected no new error."
 `;
 
-exports[`Bemlinter of leak.scss  should lint a new leak error 1`] = `
+exports[`Bemlinter of leak.scss should lint two new leak errors 1`] = `
 "  ✗ leak
 [leak.scss:10] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
+[leak.scss:14] Error: \".another-block\" is incoherent with the file name, \".leak\" expected.
 
-bemlinter has detected 1 error on 1 block.
-FAIL: bemlinter has detected 1 new error."
+bemlinter has detected 2 errors on 1 block.
+FAIL: bemlinter has detected 2 new errors."
 `;
 
-exports[`Bemlinter of leak.scss  should lint without new errors 1`] = `
-"bemlinter has detected 1 error on 1 block.
+exports[`Bemlinter of leak.scss should lint two new leak errors 2`] = `
+"  ✗ leak
+[leak.scss:10] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
+[leak.scss:14] Error: \".another-block\" is incoherent with the file name, \".leak\" expected.
+
+bemlinter has detected 2 errors on 1 block.
+FAIL: bemlinter has detected 2 new errors."
+`;
+
+exports[`Bemlinter of leak.scss should lint without new errors 1`] = `
+"bemlinter has detected 2 errors on 1 block.
 OK: bemlinter has detected no new error."
 `;

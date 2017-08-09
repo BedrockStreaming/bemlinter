@@ -13,15 +13,17 @@ FAIL: bemlinter has detected 2 errors on 1 block."
 exports[`Bemlinter of leak.css should lint with a leak error 1`] = `
 "  ✗ leak
 [leak.css:11] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
+[leak.css:15] Error: \".another-block\" is incoherent with the file name, \".leak\" expected.
 
-FAIL: bemlinter has detected 1 error on 1 block."
+FAIL: bemlinter has detected 2 errors on 1 block."
 `;
 
 exports[`Bemlinter of leak.scss should lint with a leak error 1`] = `
 "  ✗ leak
 [leak.scss:10] Error: \".external-block\" is incoherent with the file name, \".leak\" expected.
+[leak.scss:14] Error: \".another-block\" is incoherent with the file name, \".leak\" expected.
 
-FAIL: bemlinter has detected 1 error on 1 block."
+FAIL: bemlinter has detected 2 errors on 1 block."
 `;
 
 exports[`Bemlinter of mixins-content.scss should lint with a leak error 1`] = `
